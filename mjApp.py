@@ -1,7 +1,7 @@
 from flask import Flask, redirect, url_for, render_template, request, session, flash, Markup
 from random import randrange
 import mjJournaling
-import mjUtil
+import mjUtilities
 
 app = Flask(__name__)
 app.secret_key = "403qtnv4q-mnqu4-,b5[o.lsh.pqmcq8m.htlm5ipwimtjvq80[-4.bwmhnr3,,po0-7=-,rmv23[0m6lm3HU3JA;S,.MGSM4QTQ"
