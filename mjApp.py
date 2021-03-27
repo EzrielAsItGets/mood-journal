@@ -14,18 +14,31 @@ def home():
 
         if request.method == "POST": # On a POST request, discern which option the user selected and redirect accordingly.
             selection = request.form["entry"] # Save the user's entry selection as session data for the view page.
+
             if selection == "Create":
                 return redirect(url_for("create"))
+            
             elif selection == "Logout":
                 session.pop("user", None)
                 return redirect(url_for("login"))
+            
+            elif selection == "Blacklist":
+                bl = request.form["bl"]
+                mjUtilities.addBListed(session["user"], bl)
+                return redirect(url_for("home"))
+            
+            elif selection == "De-Blacklist":
+                bl = request.form["bl"]
+                mjUtilities.removeBListed(session["user"], bl)
+                return redirect(url_for("home"))
+            
             else:
                 session["view"] = selection
                 return redirect(url_for("view"))
 
         else: # On a GET request, construct the home page using the user's entries as buttons.
             entries = mjJournaling.getAllEntries(session["user"])
-            return render_template("index.html", content=entries)
+            return render_template("index.html", content=entries, blist=mjUtilities.getBList(session["user"]))
 
     else: # If the user is not authenticated, redirect to the login page.
         return redirect(url_for("login"))
@@ -39,7 +52,7 @@ def login():
             username = request.form["username"]
             password = request.form["password"]
             if username and password:
-                if(mjUtil.authorize(username, password)):
+                if(mjUtilities.authorize(username, password)):
                     session["user"] = username
                     return redirect(url_for("home"))
             flash("Invalid Account!")
@@ -52,7 +65,7 @@ def create():
         if request.method == "POST":
             entry = request.form["content"]
             id = mjJournaling.createEntry(entry, session["user"])
-            mjUtil.addEntry(session["user"], id)
+            mjUtilities.addEntry(session["user"], id)
             return redirect(url_for("home"))
 
         else:
@@ -68,7 +81,7 @@ def view():
             if request.method == "POST":
                 id = session["view"]
                 mjJournaling.deleteEntry(id)
-                mjUtil.removeEntry(session["user"], id)
+                mjUtilities.removeEntry(session["user"], id)
                 return redirect(url_for("home"))
             else:
                 id = session["view"]
