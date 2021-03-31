@@ -10,6 +10,10 @@ body {
     background-size: cover;
 }
 
+.inline {
+   display: inline;
+}
+
 .verticalLine {
     position: absolute;
     background-color: whitesmoke;
@@ -47,4 +51,32 @@ body {
     max-width: 200%;
     max-height: 200%;
     display: block;
+}
+
+.login {
+    position: absolute;
+    left: 0pc;
+    top: 17pc;
+    width: 300px;
+    height: auto;
+}
+
+.loginButton {
+    border: none;
+    padding: 0;
+    background: none;
+    max-width: 10%;
+    max-height: 10%;
+}
+
+.loginButtonPos {
+    position: absolute;
+    left: 175px;
+    top: 96px;
+    width: 300px;
+    height: auto;
+    border: none;
+    padding: 0;
+    background: none;
+    outline: none;
 }
