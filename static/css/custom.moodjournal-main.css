@@ -1,0 +1,50 @@
+@font-face {
+    font-family: "segoe-ui";
+    src: url('/static/fonts/segoe-ui.ttf')
+}
+
+body {
+    color: #ffffff;
+    background-position: -50px bottom;
+    background-image: url('/static/img/welcome-long.png');
+    background-size: cover;
+}
+
+.verticalLine {
+    position: absolute;
+    background-color: whitesmoke;
+    top: 16pc;
+    bottom: pc;
+    left: 28pt;
+    width: 2px;
+    height: 25pc;
+    opacity: 0.3;
+}
+
+.mjNotebookSize {
+    max-width: 90%;
+    max-height: 90%;
+    display: block;
+}
+
+.mjNotebookPos {
+    position: absolute;
+    left: 8pc;
+    top: 16pc;
+    width: 300px;
+    height: auto;
+}
+
+.mjLogoPos {
+    position: absolute;
+    left: 0pc;
+    top: 26pc;
+    width: 300px;
+    height: auto;
+}
+
+.mjLogoSize {
+    max-width: 200%;
+    max-height: 200%;
+    display: block;
+}
