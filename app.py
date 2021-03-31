@@ -39,7 +39,7 @@ def home():
         pass
     else: # If the user is not authenticated, redirect to the login page.
         return redirect(url_for("login"))
-    return render_template('pages/placeholder.home.html')
+    return render_template('pages/home.html')
 
 
 @app.route('/about')
