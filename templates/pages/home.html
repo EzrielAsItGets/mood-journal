@@ -1,7 +1,7 @@
-{% extends 'layouts/main.html' %}
+{% extends 'layouts/menu.html' %}
 {% block title %}Home{% endblock %}
 {% block content %}
 
-
+<audio src="{{ url_for('static', filename = 'audio/Windows XP Logon Sound.mp3') }}" id="loginSound" autoplay="autoplay"></audio>
 
 {% endblock %}
