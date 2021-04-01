@@ -6,11 +6,16 @@
       <div class="col-sm-5"></div>
       <div class="col-sm-3"></div>
       <div class="col-sm-2">
+        <button class="flowerPos">
+          <img src="{{ url_for('static', filename = 'img/red-flower.jpg') }}" class="flower" alt="Flower">
+        </button>
+        <div class="menuChoicePos">
+          <p class="segoe-ui menuChoice">Log In</p>
+        </div>
         <form method="post" class="form login">
           {{ form.name(class_ = 'form-control first-input', placeholder = form.name.label.text, required = true, autofocus = true) }}
           <p class="segoe-ui passwordText">Type your password</p>
           {{ form.password(class_ = 'form-control last-input', placeholder = form.password.label.text, required = true) }}
-          <p><a href="{{ url_for('register') }}">Register</a></p>
           <button type="submit" class="loginButtonPos" width='1' height='1'>
             <img src="{{ url_for('static', filename = 'img/submit.png') }}" class="loginButton">
           </button>
