@@ -3,16 +3,23 @@
 {% block content %}
   <div class="container">
     <div class="row">
-      <div class="col-sm-5"></div>
-      <div class="col-sm-3"></div>
-      <div class="col-sm-2">
-        <button class="flowerPos">
+      <div class="col-lg-5">
+        <div class="menuTextPos">
+          <p class="segoe-ui menuText">To begin, log in</p>
+        </div>
+      </div>
+      <div class="col-lg-3"></div>
+      <div class="col-lg-2">
+        <div class="loginSelectPos hiddenForm">
+          <img src="{{ url_for('static', filename = 'img/login-select.png') }}" class="loginSelect" alt="Login Select">
+        </div>
+        <button class="flowerPos" onclick="revealForm()">
           <img src="{{ url_for('static', filename = 'img/red-flower.jpg') }}" class="flower" alt="Flower">
         </button>
         <div class="menuChoicePos">
           <p class="segoe-ui menuChoice">Log In</p>
         </div>
-        <form method="post" class="form login">
+        <form method="post" class="form login hiddenForm">
           {{ form.name(class_ = 'form-control first-input', placeholder = form.name.label.text, required = true, autofocus = true) }}
           <p class="segoe-ui passwordText">Type your password</p>
           {{ form.password(class_ = 'form-control last-input', placeholder = form.password.label.text, required = true) }}
@@ -21,7 +28,7 @@
           </button>
         </form>
       </div>
-      <div class="col-sm-2"></div>
+      <div class="col-lg-2"></div>
     </div>
   </div>
 {% endblock %}

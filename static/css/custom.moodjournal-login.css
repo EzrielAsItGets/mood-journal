@@ -56,7 +56,7 @@ body {
 .login {
     position: absolute;
     left: 0pc;
-    top: 325px;
+    top: 315px;
     width: 300px;
     height: auto;
 }
@@ -113,7 +113,37 @@ body {
 .menuChoicePos {
     position: absolute;
     left: 0pc;
-    top: 270px;
+    top: 262px;
     width: 300px;
     height: auto;
+}
+
+.loginSelect {
+    max-width: 170%;
+    max-height: 170%;
+    display: block;
+}
+
+.loginSelectPos {
+    position: absolute;
+    left: -9pc;
+    top: 250px;
+    width: 300px;
+    height: auto;
+}
+
+.menuText {
+    font-size: 30px;
+}
+
+.menuTextPos {
+    position: absolute;
+    left: 165px;
+    top: 460px;
+    width: 300px;
+    height: auto;
+}
+
+.hiddenForm {
+    display: none;
 }
