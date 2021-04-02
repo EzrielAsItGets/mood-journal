@@ -35,9 +35,7 @@ def login_required(test):
 
 @app.route('/')
 def home():
-    if 'user' in session: # If the user is authenticated, render the home page.
-        pass
-    else: # If the user is not authenticated, redirect to the login page.
+    if 'user' not in session:
         return redirect(url_for("login"))
     return render_template('pages/home.html')
 
