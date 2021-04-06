@@ -2,9 +2,16 @@ import redis
 
 r = redis.Redis(host = "redis-17190.c99.us-east-1-4.ec2.cloud.redislabs.com", port = "17190", password = "LDMwbQfGPmB8RRyDt3X4ZujdF8JguKAi")
 
-# Authorize user login if credentials match those in database
+# Authorize user login if credentials match those in database.
 def authorize(id, pw):
     if pw == str(r.hget(id, 'pw'), 'utf-8'):
+        return True
+    else:
+        return False
+
+# Checks if the specified username exists in the database.
+def isUser(username):
+    if r.hgetall(username):
         return True
     else:
         return False
@@ -18,14 +25,17 @@ def addEntry(username, id):
         entries = '{' + id + '}'
     r.hset(username, 'entries', entries)
 
-# Removes the given entry from the given user's entry list.
+# Removes the given entry from the given user's entry list. Returns True if successful, False otherwise.
 def removeEntry(username, id):
     entries = str(r.hget(username, 'entries'), 'utf-8')
     eList = entries[1:-1].split(', ')
-    if id in eList:
+    if id in eList: # Check that the entry to be removed exists in the list.
         eList.remove(id)
         entries = '{' + ', '.join(eList) + '}'
         r.hset(username, 'entries', entries)
+        return True
+    else:
+        return False
     
 # Add user specified by listed to the blacklist of username.
 def addBListed(username, listed):
@@ -36,15 +46,69 @@ def addBListed(username, listed):
         blacklist = '{' + listed + '}'
     r.hset(username, 'bl', blacklist)
 
-# Remove user specified by listed from the blacklist of username.
+# Remove user specified by listed from the blacklist of username. Returns True if successful, False otherwise.
 def removeBListed(username, listed):
     blacklist = str(r.hget(username, 'bl'), 'utf-8')
     bList = blacklist[1:-1].split(', ')
-    if listed in bList:
+    if listed in bList: # Check that the user is blacklisted
         bList.remove(listed)
         blacklist = '{' + ', '.join(bList) + '}'
         r.hset(username, 'bl', blacklist)
+        return True
+    else:
+        return False
 
 # Return the blacklist of username.
 def getBList(username):
     return str(r.hget(username, "bl"), 'utf-8')
+
+# Checks if user specified by listed is on the blacklist of user specified by username.
+def isBListed(username, listed):
+    blacklist = str(r.hget(username, 'bl'), 'utf-8')
+    bList = blacklist[1:-1].split(', ')
+    if listed in bList:
+        return True
+    else:
+        return False
+
+# Shares the entry specified by id to the user specified by user. Returns True if successful, False otherwise.
+# Note: Attempts to share an entry must first be checked for validity before calling shareEntry().
+def shareEntry(username, id):
+    entries = str(r.hget(username, "entries"), 'utf-8')
+    eList = entries[1:-1].split(", ")
+    if id not in eList: # Ensure the user is not attempting to send an entry that has already been shared.
+        eid = '#' + id[1:] # Add the # indicator to distinguish access level.
+        eList.append(eid)
+        entries = '{' + ', '.join(eList) + '}'
+        r.hset(username, 'entries', entries)
+        return True
+    else:
+        return False
+
+# Shares the entry specified by id to the user specified by user, including the entry's mood score. Returns True if successful, False otherwise.
+# Note: Attempts to share an entry must first be checked for validity before calling shareMood().
+def shareMood(username, id):
+    entries = str(r.hget(username, "entries"), 'utf-8')
+    eList = entries[1:-1].split(", ")
+    if id not in eList: # Ensure the user is not attempting to send an entry that has already been shared.
+        eid = '$' + id[1:] # Add the $ indicator to distinguish access level.
+        eList.append(eid)
+        entries = '{' + ', '.join(eList) + '}'
+        r.hset(username, 'entries', entries)
+        return True
+    else:
+        return False
+
+# Shares the entry specified by id to the user specified by user, including the entry's mood score and matched song. Returns True if successful, False otherwise.
+# Note: Attempts to share an entry must first be checked for validity before calling shareSong().
+def shareSong(username, id):
+    entries = str(r.hget(username, "entries"), 'utf-8')
+    eList = entries[1:-1].split(", ")
+    if id not in eList: # Ensure the user is not attempting to send an entry that has already been shared.
+        eid = '%' + id[1:] # Add the % indicator to distinguish access level.
+        eList.append(eid)
+        entries = '{' + ', '.join(eList) + '}'
+        r.hset(username, 'entries', entries)
+        return True
+    else:
+        return False

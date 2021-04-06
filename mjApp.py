@@ -55,7 +55,7 @@ def login():
                 if(mjUtilities.authorize(username, password)):
                     session["user"] = username
                     return redirect(url_for("home"))
-            flash("Invalid Account!")
+            # flash("Invalid Account!")
 
         return render_template("login.html")
 

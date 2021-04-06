@@ -6,11 +6,14 @@ r = redis.Redis(host = "redis-17190.c99.us-east-1-4.ec2.cloud.redislabs.com", po
 
 # Get the entry specified by id.
 def getEntry(id):
-    return r.hgetall(id)
+    if r.hgetall(id):
+        return r.hgetall(id)
+    else:
+        return False
 
 # Return a list of all entry IDs visible to user.
-def getAllEntries(user):
-    entries = str(r.hget(user, "entries"), 'utf-8')
+def getAllEntries(username):
+    entries = str(r.hget(username, "entries"), 'utf-8')
     eList = entries[1:-1].split(", ")
 
     return eList
