@@ -4,4 +4,59 @@
 
 <audio src="{{ url_for('static', filename = 'audio/Windows XP Logon Sound.mp3') }}" id="loginSound" autoplay="autoplay"></audio>
 
+<div class="desktop">
+    <div class="icon faisal-akhtar">
+        <img src="/static/img/documents.png">
+        <div class="icon-name">My Documents</div>
+    </div>
+    <div class="icon my-computer">
+        <img src="/static/img/computer.png">
+        <div class="icon-name">My Computer</div>
+    </div>
+    <div class="icon my-network">
+        <img src="/static/img/network.png">
+        <div class="icon-name">My Network</div>
+    </div>
+    <div class="icon note-pad">
+        <img src="/static/img/notepad.png">
+        <div class="icon-name">ReadME.txt</div>
+    </div>
+    <div class="icon recycle-bin">
+        <img src="/static/img/recycle.png">
+        <div class="icon-name">Recycle Bin</div>
+    </div>
+  </div>
+
+  <div class="window">
+    <div class="title-bar">
+        <div><img src="/static/img/notepad.png"> ReadME.txt</div>
+        <div class="controls">
+            <button class="cls"></button>
+            <button class="max"></button>
+            <button class="min"></button>
+        </div>
+    </div>
+    <div class="menu-bar">
+        <span>File</span>
+        <span>Edit</span>
+        <span>Format</span>
+        <span>View</span>
+        <span>Help</span>
+    </div>
+    <textarea></textarea>
+  </div>
+
+  <div class="taskbar">
+    <div class="start-button"><img src="/static/img/logo.svg"> start</div>
+
+    <div class="opened-tabs">
+        <div class="open-tab" onclick="window.open('https://faisalakhtar.github.io/')"><img src="/static/img/documents.png"> My Documents</div>
+        <div class="open-tab" onclick="window.open('https://github.com/faisalAkhtar/')"><img src="/static/img/computer.png"> My Computer</div>
+        <div class="open-tab" onclick="window.open('https://twitter.com/faisallakhtarr/')"><img src="/static/img/network.png"> My Network</div>
+        <div class="open-tab readme active"><img src="/static/img/notepad.png"> ReadME.txt</div>
+    </div>
+
+    <div class="time">11:20 PM</div>
+  </div>
+
 {% endblock %}
