@@ -6,8 +6,29 @@ r = redis.Redis(host = "redis-17190.c99.us-east-1-4.ec2.cloud.redislabs.com", po
 
 # Get the entry specified by id.
 def getEntry(id):
-    if r.hgetall(id):
-        return r.hgetall(id)
+    acc = id[0]                # Access level indicator
+    sub = '_' + id[1:]         # The id to submit to the database
+    entry = r.hgetall(sub)
+    entryDict = {}             # A dictionary to hold the information to which the user is allowed access
+    if entry:
+        if acc == '#':         # Just entry shared
+            entryDict['date'] = entry[b'date']
+            entryDict['entry'] = entry[b'entry']
+            entryDict['author'] = entry[b'author']
+        elif acc == '$':       # Entry and mood score shared
+            entryDict['date'] = entry[b'date']
+            entryDict['entry'] = entry[b'entry']
+            entryDict['author'] = entry[b'author']
+            entryDict['score'] = entry[b'score']
+        else:                  # Either the whole thing was shared or this is the user's own entry
+            entryDict['date'] = entry[b'date']
+            entryDict['entry'] = entry[b'entry']
+            entryDict['author'] = entry[b'author']
+            entryDict['score'] = entry[b'score']
+            entryDict['song'] = entry[b'song']
+
+        return entryDict
+
     else:
         return False
 
