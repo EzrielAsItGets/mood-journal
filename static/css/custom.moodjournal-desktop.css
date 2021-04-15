@@ -3,6 +3,11 @@ body {
     background-size: cover;
 }
 
+a {
+    color: inherit;
+    text-decoration: inherit;
+  }
+
 .desktop {
     position: absolute;
     padding: 8px;
@@ -244,7 +249,7 @@ textarea {
     margin: 3px 0;
     float: left;
     background-color: #4892F7;
-    background: url(btn1.png) no-repeat 0 0;
+    background: url('/static/img/btn1.png') no-repeat 0 0;
     border: 1px solid #306FD9;
     border-radius: 2px;
     font-family: calibri, monospace;
@@ -259,11 +264,11 @@ textarea {
 }
 
 .open-tab:hover {
-    background: url(btn2.png) no-repeat 0 0;
+    background: url('/static/img/btn2.png') no-repeat 0 0;
 }
 
 .open-tab.active {
-    background: url(btn3.png) no-repeat 0 0;
+    background: url('/static/img/btn3.png') no-repeat 0 0;
 }
 
 .open-tab img {

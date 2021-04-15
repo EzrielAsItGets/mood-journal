@@ -40,9 +40,11 @@ def home():
     return render_template('pages/home.html')
 
 
-@app.route('/about')
-def about():
-    return render_template('pages/placeholder.about.html')
+@app.route('/create', methods=["POST", "GET"])
+def createEntry():
+    if 'user' not in session:
+        return redirect(url_for("login"))
+    return render_template('pages/create_entry.html')
 
 
 @app.route('/login', methods=["POST", "GET"])
