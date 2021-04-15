@@ -6,30 +6,30 @@
 
 <div class="desktop">
     <div class="icon faisal-akhtar">
-        <img src="/static/img/documents.png">
+        <img src="{{ url_for('static', filename = 'img/documents.png') }}">
         <div class="icon-name">My Documents</div>
     </div>
     <div class="icon my-computer">
-        <img src="/static/img/computer.png">
+        <img src="{{ url_for('static', filename = 'img/computer.png') }}">
         <div class="icon-name">My Computer</div>
     </div>
     <div class="icon my-network">
-        <img src="/static/img/network.png">
+        <img src="{{ url_for('static', filename = 'img/network.png') }}">
         <div class="icon-name">My Network</div>
     </div>
     <div class="icon note-pad">
-        <img src="/static/img/notepad.png">
+        <img src="{{ url_for('static', filename = 'img/notepad.png') }}">
         <div class="icon-name">ReadME.txt</div>
     </div>
     <div class="icon recycle-bin">
-        <img src="/static/img/recycle.png">
+        <img src="{{ url_for('static', filename = 'img/recycle.png') }}">
         <div class="icon-name">Recycle Bin</div>
     </div>
   </div>
 
   <div class="window">
     <div class="title-bar">
-        <div><img src="/static/img/notepad.png"> ReadME.txt</div>
+        <div><img src="{{ url_for('static', filename = 'img/notepad.png') }}"> ReadME.txt</div>
         <div class="controls">
             <button class="cls"></button>
             <button class="max"></button>
@@ -47,12 +47,12 @@
   </div>
 
   <div class="taskbar">
-    <div class="start-button"><img src="/static/img/logo.svg"> start</div>
+    <div class="start-button"><img src="{{ url_for('static', filename = 'img/logo.svg') }}"> start</div>
 
     <div class="opened-tabs">
-        <div class="open-tab" onclick="window.open('https://faisalakhtar.github.io/')"><img src="/static/img/documents.png"> My Documents</div>
-        <div class="open-tab" onclick="window.open('https://github.com/faisalAkhtar/')"><img src="/static/img/computer.png"> My Computer</div>
-        <div class="open-tab" onclick="window.open('https://twitter.com/faisallakhtarr/')"><img src="/static/img/network.png"> My Network</div>
+        <div class="open-tab" onclick="window.open('https://faisalakhtar.github.io/')"><img src="{{ url_for('static', filename = 'img/documents.png') }}"> My Documents</div>
+        <div class="open-tab" onclick="window.open('https://github.com/faisalAkhtar/')"><img src="{{ url_for('static', filename = 'img/computer.png') }}"> My Computer</div>
+        <div class="open-tab" onclick="window.open('https://twitter.com/faisallakhtarr/')"><img src="{{ url_for('static', filename = 'img/network.png') }}"> My Network</div>
         <div class="open-tab readme active"><img src="/static/img/notepad.png"> ReadME.txt</div>
     </div>
 
