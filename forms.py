@@ -1,6 +1,8 @@
 from flask_wtf import FlaskForm
 from wtforms import TextField, PasswordField
 from wtforms.validators import DataRequired, EqualTo, Length
+from wtforms.fields import StringField
+from wtforms.widgets import TextArea
 
 # Set your classes here.
 
@@ -30,4 +32,9 @@ class LoginForm(FlaskForm):
 class ForgotForm(FlaskForm):
     email = TextField(
         'Email', validators=[DataRequired(), Length(min=6, max=40)]
+    )
+
+class JournalForm(FlaskForm):
+    body = StringField(
+        u'Text', widget=TextArea(), validators=[DataRequired(), Length(min=3)]
     )

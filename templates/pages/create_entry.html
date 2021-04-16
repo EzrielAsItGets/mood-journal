@@ -25,7 +25,7 @@
     </div>
   </div>
 
-  <div class="window">
+  <div id = "moveable" class="window">
     <div class="title-bar">
         <div><img src="{{ url_for('static', filename = 'img/notebook.png') }}"> MoodJournal</div>
         <div class="controls">
@@ -40,7 +40,12 @@
         <span>Insert</span>
         <span>People</span>
     </div>
-    <textarea></textarea>
+    <form method="post">
+      {{ form.body(cols="35", rows="22") }}
+      <div class="menu-bar-bottom">
+        <input type="submit" value="Submit">
+      </div>
+    </form>
   </div>
 
   <div class="taskbar">

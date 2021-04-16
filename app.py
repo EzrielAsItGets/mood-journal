@@ -42,9 +42,12 @@ def home():
 
 @app.route('/create', methods=["POST", "GET"])
 def createEntry():
+    form = JournalForm(request.form)
     if 'user' not in session:
         return redirect(url_for("login"))
-    return render_template('pages/create_entry.html')
+    if request.method == 'POST':
+        entry = form.body.data
+    return render_template('pages/create_entry.html', form=form)
 
 
 @app.route('/login', methods=["POST", "GET"])

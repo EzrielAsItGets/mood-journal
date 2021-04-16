@@ -36,5 +36,5 @@ document.querySelector(".my-network").ondblclick = function () {
 
 document.querySelector(".note-pad").ondblclick = function () {
     setTimeout( ()=> { this.classList.remove("selected") }, 2 )
-    window.open("/create")
+    window.location.replace("/create")
 }

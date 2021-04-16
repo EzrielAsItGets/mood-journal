@@ -78,17 +78,15 @@ a {
     left: 50%;
     transform: translate(-50%, -50%);
     max-width: 500px;
-    max-height: 400px;
+    max-height: 439px;
     width: calc(100% - 50px);
     height: calc(100% - 100px);
-
+    
     box-shadow: inset -1px -1px #00138c, inset 1px 1px #0831d9, inset -2px -2px #001ea0, inset 2px 2px #166aee, inset -3px -3px #003bda, inset 3px 3px #0855dd;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
     padding: 0 0 3px;
     background: #ffffff;
-
-    transition-duration: 0.1s;
 }
 
 .window.maximized {
@@ -291,6 +289,17 @@ textarea {
     text-shadow: 1px 1px 2px #222;
     cursor: pointer;
     text-transform: uppercase;
+}
+
+.menu-bar-bottom {
+    height: 35px;
+    font-size: 14px;
+    line-height: 20px;
+    color: black;
+    background-color: #E9EADA;
+    border-bottom: 1px solid #939498;
+    width: calc(100% - 4px);
+    margin: -5px 2px;
 }
 
 @media (orientation: landscape) {
