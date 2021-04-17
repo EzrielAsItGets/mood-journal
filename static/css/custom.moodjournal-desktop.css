@@ -78,7 +78,7 @@ a {
     left: 50%;
     transform: translate(-50%, -50%);
     max-width: 500px;
-    max-height: 439px;
+    max-height: 472px;
     width: calc(100% - 50px);
     height: calc(100% - 100px);
 
@@ -294,7 +294,7 @@ textarea {
 }
 
 .menu-bar-bottom {
-    height: 35px;
+    height: 62px;
     font-size: 14px;
     line-height: 20px;
     color: black;
@@ -304,10 +304,11 @@ textarea {
     margin: -5px 2px;
 }
 
-input[type=submit] {
-    margin: 7px 13px;
+input[type=image] {
+    margin: 5px 11px;
     cursor: pointer;
     float: right;
+    outline: none;
 }
 
 @media (orientation: landscape) {

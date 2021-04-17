@@ -43,7 +43,7 @@
     <form method="post">
       {{ form.body(cols="35", rows="22") }}
       <div class="menu-bar-bottom">
-        <input type="submit" value="Submit">
+        <input type="image" name="submit" src="{{ url_for('static', filename = 'img/save.png') }}" alt="Submit"/>
       </div>
     </form>
   </div>
