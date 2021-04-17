@@ -26,7 +26,7 @@ document.querySelectorAll(".icon").forEach((icon) => {
 
 document.querySelector(".faisal-akhtar").ondblclick = function () {
     setTimeout( ()=> { this.classList.remove("selected") }, 2 )
-    window.open("https://faisalakhtar.github.io/")
+    window.location.replace("/load")
 }
 
 document.querySelector(".my-network").ondblclick = function () {

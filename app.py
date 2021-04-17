@@ -37,7 +37,22 @@ def login_required(test):
 def home():
     if 'user' not in session:
         return redirect(url_for('login'))
+    if 'view' in session:
+        session.pop('view', None)
     return render_template('pages/home.html')
+
+
+@app.route('/load', methods=["POST", "GET"])
+def loadEntry():
+    if 'user' not in session:
+        return redirect(url_for('login'))
+    if 'view' in session:
+        session.pop('view', None)
+    entries = journaling.getAllEntries(session['user'])  
+    if request.method == 'POST':
+        selection = request.form['entry']
+        session['view'] = selection 
+    return render_template('pages/load_entry.html', content=entries)
 
 
 @app.route('/create', methods=["POST", "GET"])
@@ -45,12 +60,13 @@ def createEntry():
     form = JournalForm(request.form)
     if 'user' not in session:
         return redirect(url_for('login'))
+    if 'view' in session:
+        session.pop('view', None)
     if request.method == 'POST':
         entry = form.body.data
         ID = journaling.createEntry(entry, session['user'])
         utilities.addEntry(session['user'], ID)
-        return redirect(url_for('home'))
-        
+        return redirect(url_for('home'))    
     return render_template('pages/create_entry.html', form=form)
 
 
@@ -65,6 +81,7 @@ def login():
         if utilities.authorize(username, password):
             session['user'] = username
             return redirect(url_for('home'))
+
     return render_template('forms/login.html', form=form)
 
 
