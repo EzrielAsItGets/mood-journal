@@ -4,11 +4,35 @@ import datetime
 
 # Get the entry specified by id.
 def getEntry(id):
-    return redisDB.r.hgetall(id)
+    acc = id[0]                # Access level indicator
+    sub = '_' + id[1:]         # The id to submit to the database
+    entry = redisDB.r.hgetall(sub)
+    entryDict = {}             # A dictionary to hold the information to which the user is allowed access
+    if entry:
+        if acc == '#':         # Just entry shared
+            entryDict['date'] = entry[b'date']
+            entryDict['entry'] = entry[b'entry']
+            entryDict['author'] = entry[b'author']
+        elif acc == '$':       # Entry and mood score shared
+            entryDict['date'] = entry[b'date']
+            entryDict['entry'] = entry[b'entry']
+            entryDict['author'] = entry[b'author']
+            entryDict['score'] = entry[b'score']
+        else:                  # Either the whole thing was shared or this is the user's own entry
+            entryDict['date'] = entry[b'date']
+            entryDict['entry'] = entry[b'entry']
+            entryDict['author'] = entry[b'author']
+            entryDict['score'] = entry[b'score']
+            entryDict['song'] = entry[b'song']
 
-# Return a list of all entry IDs visible to user.
-def getAllEntries(user):
-    entries = str(redisDB.r.hget(user, "entries"), 'utf-8')
+        return entryDict
+
+    else:
+        return False
+
+# Return a list of all entry IDs visible to useredisDB.r.
+def getAllEntries(username):
+    entries = str(redisDB.r.hget(username, "entries"), 'utf-8')
     eList = entries[1:-1].split(", ")
 
     return eList

@@ -7,7 +7,7 @@ import logging
 from logging import Formatter, FileHandler
 from forms import *
 import os
-import utilities
+import journaling, utilities
 
 #----------------------------------------------------------------------------#
 # App Config.
@@ -36,7 +36,7 @@ def login_required(test):
 @app.route('/')
 def home():
     if 'user' not in session:
-        return redirect(url_for("login"))
+        return redirect(url_for('login'))
     return render_template('pages/home.html')
 
 
@@ -44,9 +44,13 @@ def home():
 def createEntry():
     form = JournalForm(request.form)
     if 'user' not in session:
-        return redirect(url_for("login"))
+        return redirect(url_for('login'))
     if request.method == 'POST':
         entry = form.body.data
+        ID = journaling.createEntry(entry, session['user'])
+        utilities.addEntry(session['user'], ID)
+        return redirect(url_for('home'))
+        
     return render_template('pages/create_entry.html', form=form)
 
 
