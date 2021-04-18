@@ -311,6 +311,30 @@ input[type=image] {
     outline: none;
 }
 
+.entry-scroll {
+    overflow: scroll;
+    width: 462px;
+    height: 401px;
+    margin-left: 20px;
+    background: white;
+}
+
+.entry-list {
+    background: none;
+    color: blue;
+    border-style: none;
+    height: 50px;
+    width: 316px;
+    text-align: left;
+    text-decoration-line: underline;
+    margin-top: -15px;
+    margin-left: 0px;
+    font: 13px 'Lucida Console', 'Courier New', monospace;
+    text-shadow: none;
+    cursor: pointer;
+    outline: none;
+}
+
 @media (orientation: landscape) {
     body {
         background-position: center bottom;

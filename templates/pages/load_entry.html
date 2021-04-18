@@ -1,5 +1,6 @@
 {% extends 'layouts/menu.html' %}
 {% block title %}Create Entry{% endblock %}
+
 {% block content %}
 
 <div class="desktop">
@@ -37,11 +38,13 @@
         <span>People</span>
     </div>
     <form method="post">
-        {% for entry in content %}
-            {% autoescape false %}
-            <input type="submit" name="entry" value="{{entry}}"><br>
-            {% endautoescape %}
-        {% endfor %}
+        <div class="entry-scroll">
+            {% for entry in content %}
+                {% autoescape false %}
+                <input type="submit" class="entry-list" name="entry" value="{{entry}}"><br>
+                {% endautoescape %}
+            {% endfor %}
+        </div>
     </form>
   </div>
 
