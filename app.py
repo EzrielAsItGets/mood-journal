@@ -81,7 +81,6 @@ def login():
         if utilities.authorize(username, password):
             session['user'] = username
             return redirect(url_for('home'))
-
     return render_template('forms/login.html', form=form)
 
 
