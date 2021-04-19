@@ -1,0 +1,68 @@
+{% extends 'layouts/menu.html' %}
+{% block title %}View Entry{% endblock %}
+
+{% block content %}
+
+<div class="desktop">
+    <div class="icon faisal-akhtar">
+        <img src="{{ url_for('static', filename = 'img/notebook.png') }}">
+        <div class="icon-name">Load Entry</div>
+    </div>
+    <div class="icon my-network">
+        <img src="{{ url_for('static', filename = 'img/blocked.png') }}">
+        <div class="icon-name">Blacklist</div>
+    </div>
+    <div class="icon note-pad">
+        <img src="{{ url_for('static', filename = 'img/create.png') }}">
+        <div class="icon-name">Create Entry</div>
+    </div>
+    <div class="icon recycle-bin">
+        <img src="{{ url_for('static', filename = 'img/recycle.png') }}">
+        <div class="icon-name">Recycle Bin</div>
+    </div>
+  </div>
+
+  <div class="window window-view">
+    <div class="title-bar">
+        <div><img src="{{ url_for('static', filename = 'img/notebook.png') }}"> MoodJournal</div>
+        <div class="controls">
+            <button class="cls"></button>
+            <button class="max"></button>
+            <button class="min"></button>
+        </div>
+    </div>
+    <div class="menu-bar">
+        <span>File</span>
+        <span>Edit</span>
+        <span>Insert</span>
+        <span>People</span>
+    </div>
+    <div class="view-scroll">
+        <p class="view-entry">{{ content }}</p>
+    </div>
+    <div class="menu-bar-bottom-view">
+        <form action="">
+            <input type="checkbox" id="mood" name="mood" value="mood" class="entry-info">
+            <label for="mood"> Mood Score: {{ mood }}</label>
+            <input type="checkbox" id="song" name="song" value="song" class="entry-info">
+            <label for="mood"> Matched Song: {{ song }}</label>
+            {{ form.name(class_ = 'form-control first-input', placeholder = form.name.label.text, required = true, autofocus = true) }}
+            <input type="submit" name="action" value="Share">
+            <input type="submit" name="action" value="Delete">
+        </form>
+    </div>
+  </div>
+
+  <div class="taskbar">
+    <div class="start-button"><img src="{{ url_for('static', filename = 'img/logo.svg') }}"> start</div>
+
+    <div class="opened-tabs">
+      <div class="open-tab"><img src="{{ url_for('static', filename = 'img/notebook.png') }}"> View Entry</div>
+    </div>
+
+    <div class="time">11:20 PM</div>
+  </div>
+
+  <script type="text/javascript" src="/static/js/window.js" defer></script>
+
+{% endblock %}
