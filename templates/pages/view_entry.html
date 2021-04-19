@@ -41,12 +41,12 @@
         <p class="view-entry">{{ content }}</p>
     </div>
     <div class="menu-bar-bottom-view">
-        <form action="">
+        <form action="#" method="post">
             <input type="checkbox" id="mood" name="mood" value="mood" class="entry-info">
             <label for="mood"> Mood Score: {{ mood }}</label>
             <input type="checkbox" id="song" name="song" value="song" class="entry-info">
             <label for="mood"> Matched Song: {{ song }}</label>
-            {{ form.name(class_ = 'form-control first-input', placeholder = form.name.label.text, required = true, autofocus = true) }}
+            {{ form.name(class_ = 'form-control first-input', placeholder = form.name.label.text, autofocus = true) }}
             <input type="submit" name="action" value="Share">
             <input type="submit" name="action" value="Delete">
         </form>
