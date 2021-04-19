@@ -336,6 +336,39 @@ input[type=image] {
     outline: none;
 }
 
+.view-scroll {
+    overflow: scroll;
+    width: 462px;
+    height: 367px;
+    margin-left: 20px;
+    background: white;
+    border: inset;
+}
+
+.view-entry {
+    font: 13px 'Lucida Console', 'Courier New', monospace;
+    color: black;
+    margin-top: inherit;
+    margin-left: 4px;
+    width: 431px;
+    white-space: pre-wrap;
+}
+
+.menu-bar-bottom-view {
+    height: 62px;
+    font-size: 14px;
+    line-height: 20px;
+    color: black;
+    /* background-color: #E9EADA; */
+    border-bottom: 1px solid #939498;
+    width: calc(100% - 4px);
+    margin: -5px 2px;
+}
+
+.window-view {
+    max-height: 477px;
+}
+
 @media (orientation: landscape) {
     body {
         background-position: center bottom;
