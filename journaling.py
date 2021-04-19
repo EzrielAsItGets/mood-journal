@@ -1,6 +1,7 @@
 import redisDB
 import uuid
 import datetime
+from google.cloud import language_v1
 
 # Get the entry specified by id.
 def getEntry(id):
@@ -61,7 +62,15 @@ def deleteEntry(id):
 
 # To be changed upon API integration
 def getAnalysis(entry):
-    return 0
+    client = language_v1.LanguageServiceClient()
+    document = language_v1.Document(content=entry, type_=language_v1.Document.Type.PLAIN_TEXT)
+
+    response = client.analyze_sentiment(document=document)
+
+    sentiment = response.document_sentiment
+    score = round(sentiment.score, 1)
+
+    return score
 
 def matchSong(entry):
     return "spotify:track:5SlKhaPcdIfSjpoM2QtM4C"
