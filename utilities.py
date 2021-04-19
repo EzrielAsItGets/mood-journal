@@ -74,6 +74,10 @@ def isBListed(username, listed):
 def shareEntry(username, id):
     entries = str(redisDB.r.hget(username, "entries"), 'utf-8')
     eList = entries[1:-1].split(", ")
+    if entries != '{}':
+        eList = entries[1:-1].split(", ")
+    else:
+        eList = []
 
     # Check if this entry has already been sent with different permissions.
     eid = '#' + id[1:]
@@ -99,7 +103,10 @@ def shareEntry(username, id):
 # Note: Attempts to share an entry must first be checked for validity before calling shareMood().
 def shareMood(username, id):
     entries = str(redisDB.r.hget(username, "entries"), 'utf-8')
-    eList = entries[1:-1].split(", ")
+    if entries != '{}':
+        eList = entries[1:-1].split(", ")
+    else:
+        eList = []
 
     # Check if this entry has already been sent with different permissions.
     eid = '#' + id[1:]
@@ -125,6 +132,10 @@ def shareMood(username, id):
 def shareSong(username, id):
     entries = str(redisDB.r.hget(username, "entries"), 'utf-8')
     eList = entries[1:-1].split(", ")
+    if entries != '{}':
+        eList = entries[1:-1].split(", ")
+    else:
+        eList = []
 
     # Check if this entry has already been sent with different permissions.
     eid = '#' + id[1:]

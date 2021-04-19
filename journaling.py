@@ -47,7 +47,8 @@ def createEntry(entry, author):
     entryDict = {"date": date, "entry": entry, "score": score, "song": song, "author": author}
 
     id = str(uuid.uuid4())
-    id = "_" + str(id) # Convert ID to a string prepended by an underscore (an identifier to distinguish users and entries in the database)
+    date = str(datetime.date.today())
+    id = "_" + date + '|' + str(id) # Convert ID to a string prepended by an underscore (an identifier to distinguish users and entries in the database)
     while redisDB.r.hgetall(id): # uuid4 has a small (but real) chance to generate two identical IDs. This check ensures that an entry in the database never gets overwritten.
         id = str(uuid.uuid4())
         id = "_" + str(id)
