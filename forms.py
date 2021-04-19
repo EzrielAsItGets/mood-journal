@@ -38,3 +38,7 @@ class JournalForm(FlaskForm):
     body = StringField(
         u'Text', widget=TextArea(), validators=[DataRequired(), Length(min=3)]
     )
+
+class NetworkForm(FlaskForm):
+    name = TextField('Username', [DataRequired()]
+    )
