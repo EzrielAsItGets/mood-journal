@@ -69,14 +69,14 @@ def viewEntry():
     mood = str(entry.get('score'), 'utf-8')
     song = str(entry.get('song'), 'utf-8')
     if request.method == 'POST':
-        if request.form.action == 'Share':
+        if request.form['action'] == 'Share':
             username = form.name.data
             utilities.shareEntry(username, ID)
             if request.form.get('mood'):
                 utilities.shareMood(username, ID)
             if request.form.get('song'):
                 utilities.shareSong(username, ID)
-        elif request.form.action == 'Delete':
+        elif request.form['action'] == 'Delete':
             journaling.deleteEntry(ID)
             utilities.removeEntry(session['user'], ID)
             return redirect(url_for('home'))
@@ -116,12 +116,7 @@ def login():
 def register():
     form = RegisterForm(request.form)
     return render_template('forms/register.html', form=form)
-
-
-@app.route('/forgot')
-def forgot():
-    form = ForgotForm(request.form)
-    return render_template('forms/forgot.html', form=form)
+    
 
 # Error handlers.
 
