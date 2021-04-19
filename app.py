@@ -48,11 +48,39 @@ def loadEntry():
         return redirect(url_for('login'))
     if 'view' in session:
         session.pop('view', None)
-    entries = journaling.getAllEntries(session['user'])  
+    content = journaling.getAllEntries(session['user'])  
     if request.method == 'POST':
         selection = request.form['entry']
-        session['view'] = selection 
-    return render_template('pages/load_entry.html', content=entries)
+        session['view'] = selection
+        return redirect(url_for('viewEntry'))
+    return render_template('pages/load_entry.html', content=content)
+
+
+@app.route('/view', methods=["POST", "GET"])
+def viewEntry():
+    form = NetworkForm(request.form)
+    if 'user' not in session:
+        return redirect(url_for('login'))
+    if 'view' not in session:
+        return redirect(url_for('loadEntry'))
+    ID = session['view']
+    entry = journaling.getEntry(ID)
+    content = str(entry.get('entry'), 'utf-8')
+    mood = str(entry.get('score'), 'utf-8')
+    song = str(entry.get('song'), 'utf-8')
+    if request.method == 'POST':
+        if request.form.action == 'Share':
+            username = form.name.data
+            utilities.shareEntry(username, ID)
+            if request.form.get('mood'):
+                utilities.shareMood(username, ID)
+            if request.form.get('song'):
+                utilities.shareSong(username, ID)
+        elif request.form.action == 'Delete':
+            journaling.deleteEntry(ID)
+            utilities.removeEntry(session['user'], ID)
+            return redirect(url_for('home'))
+    return render_template('pages/view_entry.html', content=content, mood=mood, song=song, form=form)
 
 
 @app.route('/create', methods=["POST", "GET"])
