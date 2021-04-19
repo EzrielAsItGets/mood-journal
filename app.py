@@ -71,11 +71,12 @@ def viewEntry():
     if request.method == 'POST':
         if request.form['action'] == 'Share':
             username = form.name.data
-            utilities.shareEntry(username, ID)
-            if request.form.get('mood'):
-                utilities.shareMood(username, ID)
-            if request.form.get('song'):
-                utilities.shareSong(username, ID)
+            if(utilities.isUser(username)):
+                utilities.shareEntry(username, ID)
+                if request.form.get('mood'):
+                    utilities.shareMood(username, ID)
+                if request.form.get('song'):
+                    utilities.shareSong(username, ID)
         elif request.form['action'] == 'Delete':
             journaling.deleteEntry(ID)
             utilities.removeEntry(session['user'], ID)

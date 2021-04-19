@@ -74,6 +74,18 @@ def isBListed(username, listed):
 def shareEntry(username, id):
     entries = str(redisDB.r.hget(username, "entries"), 'utf-8')
     eList = entries[1:-1].split(", ")
+
+    # Check if this entry has already been sent with different permissions.
+    eid = '#' + id[1:]
+    mid = '$' + id[1:]
+    sid = '%' + id[1:]
+    if eid in eList:
+        eList.remove(eid)
+    elif mid in eList:
+        eList.remove(mid)
+    elif sid in eList:
+        eList.remove(sid)
+    
     if id not in eList: # Ensure the user is not attempting to send an entry that has already been shared.
         eid = '#' + id[1:] # Add the # indicator to distinguish access level.
         eList.append(eid)
@@ -88,9 +100,20 @@ def shareEntry(username, id):
 def shareMood(username, id):
     entries = str(redisDB.r.hget(username, "entries"), 'utf-8')
     eList = entries[1:-1].split(", ")
+
+    # Check if this entry has already been sent with different permissions.
+    eid = '#' + id[1:]
+    mid = '$' + id[1:]
+    sid = '%' + id[1:]
+    if eid in eList:
+        eList.remove(eid)
+    elif mid in eList:
+        eList.remove(mid)
+    elif sid in eList:
+        eList.remove(sid)
+
     if id not in eList: # Ensure the user is not attempting to send an entry that has already been shared.
-        eid = '$' + id[1:] # Add the $ indicator to distinguish access level.
-        eList.append(eid)
+        eList.append(mid)
         entries = '{' + ', '.join(eList) + '}'
         redisDB.r.hset(username, 'entries', entries)
         return True
@@ -102,9 +125,20 @@ def shareMood(username, id):
 def shareSong(username, id):
     entries = str(redisDB.r.hget(username, "entries"), 'utf-8')
     eList = entries[1:-1].split(", ")
+
+    # Check if this entry has already been sent with different permissions.
+    eid = '#' + id[1:]
+    mid = '$' + id[1:]
+    sid = '%' + id[1:]
+    if eid in eList:
+        eList.remove(eid)
+    elif mid in eList:
+        eList.remove(mid)
+    elif sid in eList:
+        eList.remove(sid)
+
     if id not in eList: # Ensure the user is not attempting to send an entry that has already been shared.
-        eid = '%' + id[1:] # Add the % indicator to distinguish access level.
-        eList.append(eid)
+        eList.append(sid)
         entries = '{' + ', '.join(eList) + '}'
         redisDB.r.hset(username, 'entries', entries)
         return True
