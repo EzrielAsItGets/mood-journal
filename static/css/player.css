@@ -1,0 +1,7 @@
+.player {
+    width: 300px;
+    height: 80px;
+    transform: translate(-50%, 339%);
+    position: absolute;
+}
+}
