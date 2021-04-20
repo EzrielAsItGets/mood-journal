@@ -128,6 +128,8 @@ def login():
     form = LoginForm(request.form)
     if 'user' in session:
         return redirect(url_for('home'))
+    if 'view' in session:
+        session.pop('view', None)
     if request.method == 'POST':
         username = form.name.data
         password = form.password.data
