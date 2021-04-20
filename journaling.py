@@ -1,7 +1,9 @@
 import redisDB
 import uuid
 import datetime
+import spotipy
 from google.cloud import language_v1
+from spotipy.oauth2 import SpotifyOAuth
 
 # Get the entry specified by id.
 def getEntry(id):
@@ -42,7 +44,7 @@ def getAllEntries(username):
 def createEntry(entry, author):
     date = str(datetime.datetime.now())
     score = getAnalysis(entry)
-    song = matchSong(entry)
+    song = matchSong(score)
 
     entryDict = {"date": date, "entry": entry, "score": score, "song": song, "author": author}
 
@@ -73,5 +75,21 @@ def getAnalysis(entry):
 
     return score
 
-def matchSong(entry):
-    return "spotify:track:5SlKhaPcdIfSjpoM2QtM4C"
+def matchSong(score):
+    scope = 'user-library-read'
+    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
+
+    if redisDB.r.get(str(score)):
+        
+
+    song_info = sp.track(track_id = '5TxY7O9lFJJrd22FmboAXe')
+
+    for dictionary in song_info['album']['artists']:
+        try:
+            dictionary['name']
+        except KeyError:
+            pass
+
+    song_name = str(song_info['name']) + ' by ' + str(dictionary['name'])
+
+    return song_name
