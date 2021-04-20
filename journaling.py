@@ -1,6 +1,7 @@
 import redisDB
 import uuid
 import datetime
+import random
 import spotipy
 from google.cloud import language_v1
 from spotipy.oauth2 import SpotifyOAuth
@@ -76,20 +77,26 @@ def getAnalysis(entry):
     return score
 
 def matchSong(score):
-    scope = 'user-library-read'
-    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
+    strscore = '!' + str(score)
+    if redisDB.r.get(strscore):
+        strsonglist = redisDB.r.get(strscore)
+        songlist = strsonglist.split(', ')
+        song = random.choice(songlist)
+    else:
+        for i in range (0.1, 0.9, 0.1):
+            newscore = score + i
+            strscore = '!' + str(newscore)
+            if redisDB.r.get(strscore):
+                strsonglist = redisDB.r.get(strscore)
+                songlist = strsonglist.split(', ')
+                song = random.choice(songlist)
+            else:
+                newscore = score - i
+                strscore = '!' + str(newscore)
+                if redisDB.r.get(strscore):
+                    strsonglist = redisDB.r.get(strscore)
+                    songlist = strsonglist.split(', ')
+                    song = random.choice(songlist)
+            score = newscore
 
-    if redisDB.r.get(str(score)):
-        
-
-    song_info = sp.track(track_id = '5TxY7O9lFJJrd22FmboAXe')
-
-    for dictionary in song_info['album']['artists']:
-        try:
-            dictionary['name']
-        except KeyError:
-            pass
-
-    song_name = str(song_info['name']) + ' by ' + str(dictionary['name'])
-
-    return song_name
+    return song
