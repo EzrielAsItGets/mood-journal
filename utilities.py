@@ -184,5 +184,3 @@ def shareSong(username, id):
     #song_name = str(song_info['name']) + ' by ' + str(dictionary['name'])
 
     #return song_name
-
-register('ezriel', 'password2')
