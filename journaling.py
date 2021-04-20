@@ -42,6 +42,8 @@ def getAllEntries(username):
 
 # Create a new journal entry key-value pair in the database with the content specified by entry and the author specified by author.
 def createEntry(entry, author):
+    entry = str(entry)
+    print('entry: ' + entry)
     date = str(datetime.datetime.now())
     score = getAnalysis(entry)
     song = matchSong(score)
@@ -55,7 +57,7 @@ def createEntry(entry, author):
         id = str(uuid.uuid4())
         id = "_" + str(id)
 
-    redisDB.r.hset(name=id, mapping=entryDict)
+    redisDB.r.hmset(name=id, mapping=entryDict)
 
     return id
 
