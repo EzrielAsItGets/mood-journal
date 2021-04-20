@@ -103,5 +103,4 @@ def matchSong(score):
                     songlist = strsonglist.split(', ')
                     song = random.choice(songlist)
                     return song
-            score = newscore
             i *= 10
