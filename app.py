@@ -105,8 +105,6 @@ def createEntry():
     if 'view' in session:
         session.pop('view', None)
     template = '<iframe src="https://open.spotify.com/embed/track/5TxY7O9lFJJrd22FmboAXe" width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>'
-    if 'song' in session:
-        track = template.replace('5TxY7O9lFJJrd22FmboAXe', session['song'])
     if request.method == 'POST':
         entry = form.body.data
         ID = journaling.createEntry(entry, session['user'])
