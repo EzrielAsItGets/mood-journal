@@ -1,5 +1,16 @@
 import redisDB
 
+# Register the user with the provided username.
+def register(username, password):
+    if(not isUser(username)):
+        user = {}
+        user['pw'] = password
+        user['entries'] = '{}'
+        user['bl'] = '{}'
+        return True
+    else:
+        return False
+
 # Authorize user login if credentials match those in database.
 def authorize(id, pw):
     if pw == str(redisDB.r.hget(id, 'pw'), 'utf-8'):
@@ -157,18 +168,20 @@ def shareSong(username, id):
         return False
 
 #Retrieves the information on a song based on its URI.
-def getSong(URI):
-    scope = 'user-library-read'
-    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
+#def getSong(URI):
+    #scope = 'user-library-read'
+    #sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
 
-    song_info = sp.track(track_id = URI)
+    #song_info = sp.track(track_id = URI)
 
-    for dictionary in song_info['album']['artists']:
-        try:
-            dictionary['name']
-        except KeyError:
-            pass
+    #for dictionary in song_info['album']['artists']:
+        #try:
+            #dictionary['name']
+        #except KeyError:
+            #pass
 
-    song_name = str(song_info['name']) + ' by ' + str(dictionary['name'])
+    #song_name = str(song_info['name']) + ' by ' + str(dictionary['name'])
 
-    return song_name
+    #return song_name
+
+register('ezriel', 'password2')

@@ -79,24 +79,27 @@ def getAnalysis(entry):
 def matchSong(score):
     strscore = '!' + str(score)
     if redisDB.r.get(strscore):
-        strsonglist = redisDB.r.get(strscore)
+        strsonglist = str(redisDB.r.get(strscore), encoding='utf-8')
         songlist = strsonglist.split(', ')
         song = random.choice(songlist)
+        return song
     else:
-        for i in range (0.1, 0.9, 0.1):
+        for i in range (1, 9):
+            i /= 10
             newscore = score + i
             strscore = '!' + str(newscore)
             if redisDB.r.get(strscore):
-                strsonglist = redisDB.r.get(strscore)
+                strsonglist = str(redisDB.r.get(strscore), encoding='utf-8')
                 songlist = strsonglist.split(', ')
                 song = random.choice(songlist)
+                return song
             else:
                 newscore = score - i
                 strscore = '!' + str(newscore)
                 if redisDB.r.get(strscore):
-                    strsonglist = redisDB.r.get(strscore)
+                    strsonglist = str(redisDB.r.get(strscore), encoding='utf-8')
                     songlist = strsonglist.split(', ')
                     song = random.choice(songlist)
+                    return song
             score = newscore
-
-    return song
+            i *= 10
