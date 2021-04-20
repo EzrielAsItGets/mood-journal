@@ -54,7 +54,13 @@ def loadEntry():
     if 'view' in session:
         session.pop('view', None)
     template = '<iframe src="https://open.spotify.com/embed/track/5TxY7O9lFJJrd22FmboAXe" width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>'
-    content = journaling.getAllEntries(session['user'])  
+    entries = journaling.getAllEntries(session['user'])
+    datelist = []
+    for entry in entries:
+        info = journaling.getEntry(entry)
+        date = str(info.get('date'), 'utf-8')
+        datelist.append(date)
+    content = dict(zip(entries, datelist))
     if request.method == 'POST':
         selection = request.form['entry']
         session['view'] = selection
