@@ -156,10 +156,11 @@ def shareSong(username, id):
     else:
         return False
 
+#Retrieves the information on a song based on its URI.
 def getSong(URI):
     scope = 'user-library-read'
     sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
-    
+
     song_info = sp.track(track_id = URI)
 
     for dictionary in song_info['album']['artists']:
