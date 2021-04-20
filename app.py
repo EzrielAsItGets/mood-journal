@@ -67,7 +67,7 @@ def viewEntry():
     entry = journaling.getEntry(ID)
     content = str(entry.get('entry'), 'utf-8')
     mood = str(entry.get('score'), 'utf-8')
-    song = str(entry.get('song'), 'utf-8')
+    song = utilities.getSong(str(entry.get('song'), 'utf-8'))
     if request.method == 'POST':
         if request.form['action'] == 'Share':
             username = form.name.data
