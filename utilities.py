@@ -7,6 +7,7 @@ def register(username, password):
         user['pw'] = password
         user['entries'] = '{}'
         user['bl'] = '{}'
+        redisDB.r.hset(name=username, mapping=user)
         return True
     else:
         return False
