@@ -1,4 +1,6 @@
 import redisDB
+import spotipy
+from spotipy.oauth2 import SpotifyOAuth
 
 # Register the user with the provided username.
 def register(username, password):
@@ -169,18 +171,18 @@ def shareSong(username, id):
         return False
 
 #Retrieves the information on a song based on its URI.
-#def getSong(URI):
-    #scope = 'user-library-read'
-    #sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
+def getSong(URI):
+    scope = 'user-library-read'
+    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
 
-    #song_info = sp.track(track_id = URI)
+    song_info = sp.track(track_id = URI)
 
-    #for dictionary in song_info['album']['artists']:
-        #try:
-            #dictionary['name']
-        #except KeyError:
-            #pass
+    for dictionary in song_info['album']['artists']:
+        try:
+            dictionary['name']
+        except KeyError:
+            pass
 
-    #song_name = str(song_info['name']) + ' by ' + str(dictionary['name'])
+    song_name = str(song_info['name']) + ' by ' + str(dictionary['name'])
 
-    #return song_name
+    return song_name
