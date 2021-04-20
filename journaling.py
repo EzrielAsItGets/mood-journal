@@ -4,7 +4,6 @@ import datetime
 import random
 import spotipy
 from google.cloud import language_v1
-from spotipy.oauth2 import SpotifyOAuth
 
 # Get the entry specified by id.
 def getEntry(id):
@@ -64,7 +63,7 @@ def createEntry(entry, author):
 def deleteEntry(id):
     redisDB.r.delete(id)
 
-# To be changed upon API integration
+# Calls Google Cloud's Natural Language Processing API to analyze and provide a sentiment score to a journal entry.
 def getAnalysis(entry):
     client = language_v1.LanguageServiceClient()
     document = language_v1.Document(content=entry, type_=language_v1.Document.Type.PLAIN_TEXT)
@@ -76,6 +75,7 @@ def getAnalysis(entry):
 
     return score
 
+# Matches the sentiment score of a journal entry to a song in the database.
 def matchSong(score):
     strscore = '!' + str(score)
     if redisDB.r.get(strscore):
@@ -84,7 +84,7 @@ def matchSong(score):
         song = random.choice(songlist)
         return song
     else:
-        for i in range (1, 9):
+        for i in range (1, 9): # If the score is not found in the songs database, it will modify the passed score until one is found
             i /= 10
             newscore = score + i
             strscore = '!' + str(newscore)
