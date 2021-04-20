@@ -31,7 +31,7 @@ document.querySelector(".faisal-akhtar").ondblclick = function () {
 
 document.querySelector(".my-network").ondblclick = function () {
     setTimeout( ()=> { this.classList.remove("selected") }, 2 )
-    window.open("https://twitter.com/faisallakhtarr/")
+    window.open("https://github.com/EzrielAsItGets")
 }
 
 document.querySelector(".note-pad").ondblclick = function () {
