@@ -2,7 +2,7 @@
 # Imports
 #----------------------------------------------------------------------------#
 
-from flask import Flask, redirect, url_for, render_template, request, session
+from flask import Flask, redirect, url_for, render_template, request, session, Markup
 import logging
 from logging import Formatter, FileHandler
 from forms import *
@@ -33,13 +33,18 @@ def login_required(test):
 #----------------------------------------------------------------------------#
 
 
-@app.route('/')
+@app.route('/', methods=["POST", "GET"])
 def home():
     if 'user' not in session:
         return redirect(url_for('login'))
     if 'view' in session:
         session.pop('view', None)
-    return render_template('pages/home.html')
+    template = '<iframe src="https://open.spotify.com/embed/track/5TxY7O9lFJJrd22FmboAXe" width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>'
+    if 'song' in session:
+        track = template.replace('5TxY7O9lFJJrd22FmboAXe', session['song'])
+        return render_template('pages/home.html', player=Markup(track))
+
+    return render_template('pages/home.html', player=Markup(template))
 
 
 @app.route('/load', methods=["POST", "GET"])
@@ -48,12 +53,17 @@ def loadEntry():
         return redirect(url_for('login'))
     if 'view' in session:
         session.pop('view', None)
+    template = '<iframe src="https://open.spotify.com/embed/track/5TxY7O9lFJJrd22FmboAXe" width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>'
     content = journaling.getAllEntries(session['user'])  
     if request.method == 'POST':
         selection = request.form['entry']
         session['view'] = selection
         return redirect(url_for('viewEntry'))
-    return render_template('pages/load_entry.html', content=content)
+    if 'song' in session:
+        track = template.replace('5TxY7O9lFJJrd22FmboAXe', session['song'])
+        return render_template('pages/load_entry.html', content=content, player=Markup(track))
+
+    return render_template('pages/load_entry.html', content=content, player=Markup(template))
 
 
 @app.route('/view', methods=["POST", "GET"])
@@ -65,6 +75,9 @@ def viewEntry():
         return redirect(url_for('loadEntry'))
     ID = session['view']
     entry = journaling.getEntry(ID)
+    session['song'] = str(entry.get('song'), 'utf-8')
+    template = '<iframe src="https://open.spotify.com/embed/track/5TxY7O9lFJJrd22FmboAXe" width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>'
+    track = template.replace('5TxY7O9lFJJrd22FmboAXe', session['song'])
     content = str(entry.get('entry'), 'utf-8')
     mood = str(entry.get('score'), 'utf-8')
     song = utilities.getSong(str(entry.get('song'), 'utf-8'))
@@ -81,7 +94,7 @@ def viewEntry():
             journaling.deleteEntry(ID)
             utilities.removeEntry(session['user'], ID)
             return redirect(url_for('home'))
-    return render_template('pages/view_entry.html', content=content, mood=mood, song=song, form=form)
+    return render_template('pages/view_entry.html', content=content, mood=mood, song=song, form=form, player=Markup(track))
 
 
 @app.route('/create', methods=["POST", "GET"])
@@ -91,12 +104,19 @@ def createEntry():
         return redirect(url_for('login'))
     if 'view' in session:
         session.pop('view', None)
+    template = '<iframe src="https://open.spotify.com/embed/track/5TxY7O9lFJJrd22FmboAXe" width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>'
+    if 'song' in session:
+        track = template.replace('5TxY7O9lFJJrd22FmboAXe', session['song'])
     if request.method == 'POST':
         entry = form.body.data
         ID = journaling.createEntry(entry, session['user'])
         utilities.addEntry(session['user'], ID)
-        return redirect(url_for('home'))    
-    return render_template('pages/create_entry.html', form=form)
+        return redirect(url_for('home'))
+    if 'song' in session:
+        track = template.replace('5TxY7O9lFJJrd22FmboAXe', session['song'])
+        return render_template('pages/create_entry.html', form=form, player=Markup(track))
+            
+    return render_template('pages/create_entry.html', form=form, player=Markup(template))
 
 
 @app.route('/login', methods=["POST", "GET"])
