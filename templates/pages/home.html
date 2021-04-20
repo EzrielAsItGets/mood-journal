@@ -1,0 +1,32 @@
+{% extends 'layouts/menu.html' %}
+{% block title %}Desktop{% endblock %}
+{% block content %}
+
+<div class="desktop">
+    <div class="icon faisal-akhtar">
+        <img src="{{ url_for('static', filename = 'img/notebook.png') }}">
+        <div class="icon-name">Load Entry</div>
+    </div>
+    <div class="icon my-network">
+        <img src="{{ url_for('static', filename = 'img/blocked.png') }}">
+        <div class="icon-name">Blacklist</div>
+    </div>
+    <div class="icon note-pad">
+        <img src="{{ url_for('static', filename = 'img/create.png') }}">
+        <div class="icon-name">Create Entry</div>
+    </div>
+    <div class="icon recycle-bin">
+        <img src="{{ url_for('static', filename = 'img/recycle.png') }}">
+        <div class="icon-name">Recycle Bin</div>
+    </div>
+  </div>
+
+  <div class="window player">{{ player }}</div>
+
+  <div class="taskbar">
+    <div class="start-button"><img src="{{ url_for('static', filename = 'img/logo.svg') }}"> start</div>
+
+    <div class="time">11:20 PM</div>
+  </div>
+
+{% endblock %}
