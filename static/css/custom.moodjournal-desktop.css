@@ -369,6 +369,26 @@ input[type=image] {
     max-height: 477px;
 }
 
+.entry-info {
+    margin-left: 15px;
+    margin-top: 8px;
+}
+
+.entry-info-share {
+    margin-left: 5px;
+}
+
+.entry-info-delete {
+    float: right;
+    margin-right: 19px;
+    margin-top: 3px;
+}
+
+.share-field {
+    margin-left: 15px;
+    margin-top: 4px;
+}
+
 @media (orientation: landscape) {
     body {
         background-position: center bottom;
