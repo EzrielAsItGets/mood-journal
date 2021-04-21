@@ -4,15 +4,15 @@
 {% block content %}
 
 <div class="desktop">
-    <div class="icon faisal-akhtar">
+    <div class="icon load-entry">
         <img src="{{ url_for('static', filename = 'img/notebook.png') }}">
         <div class="icon-name">Load Entry</div>
     </div>
-    <div class="icon my-network">
+    <div class="icon blacklist">
         <img src="{{ url_for('static', filename = 'img/blocked.png') }}">
         <div class="icon-name">Blacklist</div>
     </div>
-    <div class="icon note-pad">
+    <div class="icon create-entry">
         <img src="{{ url_for('static', filename = 'img/create.png') }}">
         <div class="icon-name">Create Entry</div>
     </div>
@@ -46,9 +46,9 @@
             <label for="mood"> Mood Score: {{ mood }}</label>
             <input type="checkbox" id="song" name="song" value="song" class="entry-info">
             <label for="mood"> Matched Song: {{ song }}</label>
-            {{ form.name(class_ = 'form-control first-input', placeholder = form.name.label.text, autofocus = true) }}
-            <input type="submit" name="action" value="Share">
-            <input type="submit" name="action" value="Delete">
+            {{ form.name(class_ = 'form-control first-input share-field', placeholder = form.name.label.text, autofocus = true) }}
+            <input type="submit" name="action" value="Share" class="entry-info-share">
+            <input type="submit" name="action" value="Delete" class="entry-info-delete">
         </form>
     </div>
   </div>
