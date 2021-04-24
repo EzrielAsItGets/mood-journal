@@ -79,25 +79,44 @@ def viewEntry():
         return redirect(url_for('loadEntry'))
     ID = session['view']
     entry = journaling.getEntry(ID)
-    session['song'] = str(entry.get('song'), 'utf-8')
-    template = '<iframe src="https://open.spotify.com/embed/track/5TxY7O9lFJJrd22FmboAXe" width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>'
-    track = template.replace('5TxY7O9lFJJrd22FmboAXe', session['song'])
+
+    # Sharing functions allow incomplete entries, so the elements must be ensured to exist before rendering them on the page.
+    if entry.get('song'):
+        session['song'] = str(entry.get('song'), 'utf-8')
+        template = '<iframe src="https://open.spotify.com/embed/track/5TxY7O9lFJJrd22FmboAXe" width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>'
+        track = template.replace('5TxY7O9lFJJrd22FmboAXe', session['song'])
+        song = utilities.getSong(str(entry.get('song'), 'utf-8'))
+    else:
+        track = '<iframe src="https://open.spotify.com/embed/track/5TxY7O9lFJJrd22FmboAXe" width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>'
+        song = 'Not Shared'
+
+    if entry.get('score'):
+        mood = str(entry.get('score'), 'utf-8')
+    else:
+        mood = 'Not Shared'
+
     content = str(entry.get('entry'), 'utf-8')
-    mood = str(entry.get('score'), 'utf-8')
-    song = utilities.getSong(str(entry.get('song'), 'utf-8'))
+
     if request.method == 'POST':
         if request.form['action'] == 'Share':
-            username = form.name.data
-            if(utilities.isUser(username)):
-                utilities.shareEntry(username, ID)
-                if request.form.get('mood'):
-                    utilities.shareMood(username, ID)
-                if request.form.get('song'):
-                    utilities.shareSong(username, ID)
+            if session['user'] == str(entry.get('author'), 'utf-8'):           # Prevent sharing other people's entries
+                username = form.name.data
+                if(utilities.isUser(username)):                                # Prevent sharing with non-existent users
+                    if username != session['user']:                            # Prevent sharing an entry with yourself
+                        if not utilities.isBListed(username, session['user']): # Prevent blacklisted users from sharing
+                            if request.form.get('mood'):
+                                utilities.shareMood(username, ID)
+                            elif request.form.get('song'):
+                                utilities.shareSong(username, ID)
+                            else:
+                                utilities.shareEntry(username, ID)
         elif request.form['action'] == 'Delete':
+            # Calling delete on a shared ID will not remove anything from the database, as shared IDs have flags to indicate they were shared.
             journaling.deleteEntry(ID)
+            # The ID will be removed from the entry list, thus "un-sharing" it.
             utilities.removeEntry(session['user'], ID)
             return redirect(url_for('home'))
+
     return render_template('pages/view_entry.html', content=content, mood=mood, song=song, form=form, player=Markup(track))
 
 
@@ -111,14 +130,14 @@ def blacklist():
     template = '<iframe src="https://open.spotify.com/embed/track/5TxY7O9lFJJrd22FmboAXe" width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>'
     if request.method == 'POST':
         username = form.name.data
-        if request.form['action'] == 'Add':
-            if not utilities.isBListed(session['user'], username):
-                utilities.addBListed(session['user'], username)
-                return redirect(url_for('blacklist'))
-        elif request.form['action'] == 'Delete':
-            if not utilities.isBListed(session['user'], username):
-                utilities.removeBListed(session['user'], username)
-                return redirect(url_for('blacklist'))
+        if username != session['user']:    # Prevent blacklisting yourself
+            if utilities.isUser(username): # Prevent blacklisting a non-existent user
+                if request.form['action'] == 'Add':
+                    utilities.addBListed(session['user'], username) #TODO: incorporate the return for error message
+                    return redirect(url_for('blacklist'))
+                elif request.form['action'] == 'Delete':
+                    utilities.removeBListed(session['user'], username) #TODO: incorporate the return for error messages
+                    return redirect(url_for('blacklist'))
     strblacklist = utilities.getBList(session['user'])
     strblacklist = strblacklist.replace('{', '')
     strblacklist = strblacklist.replace('}', '')
@@ -183,7 +202,7 @@ def register():
     if request.method == 'POST':
         username = form.name.data
         password = form.password.data
-        utilities.register(username, password)
+        utilities.register(username, password) # TODO: use the return to flash an error message
         return redirect(url_for('login'))
     return render_template('forms/register.html', form=form)
     

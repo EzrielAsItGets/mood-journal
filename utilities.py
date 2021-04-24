@@ -2,7 +2,7 @@ import redisDB
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 
-# Register the user with the provided username.
+# Register the user with the provided username. Returns True if successful, False if the name already exists.
 def register(username, password):
     if(not isUser(username)):
         user = {}
@@ -14,7 +14,7 @@ def register(username, password):
     else:
         return False
 
-# Authorize user login if credentials match those in database.
+# Authorize user login if credentials match those in database. Returns True if successful, false otherwise.
 def authorize(id, pw):
     if pw == str(redisDB.r.hget(id, 'pw'), 'utf-8'):
         return True
@@ -49,20 +49,24 @@ def removeEntry(username, id):
     else:
         return False
     
-# Add user specified by listed to the blacklist of username.
+# Add user specified by listed to the blacklist of username. Returns True if successful, False if the user is already blacklisted.
 def addBListed(username, listed):
-    blacklist = str(redisDB.r.hget(username, 'bl'), 'utf-8')
-    if blacklist != "{}":
-        blacklist = blacklist[0:-1] + ', ' + listed + '}'
+    if not isBListed(username, listed):
+        blacklist = str(redisDB.r.hget(username, 'bl'), 'utf-8')
+        if blacklist != "{}":
+            blacklist = blacklist[0:-1] + ', ' + listed + '}'
+        else:
+            blacklist = '{' + listed + '}'
+        redisDB.r.hset(username, 'bl', blacklist)
+        return True
     else:
-        blacklist = '{' + listed + '}'
-    redisDB.r.hset(username, 'bl', blacklist)
+        return False
 
-# Remove user specified by listed from the blacklist of username. Returns True if successful, False otherwise.
+# Remove user specified by listed from the blacklist of username. Returns True if successful, False if the user is not already blacklisted.
 def removeBListed(username, listed):
-    blacklist = str(redisDB.r.hget(username, 'bl'), 'utf-8')
-    bList = blacklist[1:-1].split(', ')
-    if listed in bList: # Check that the user is blacklisted
+    if isBListed(username, listed):
+        blacklist = str(redisDB.r.hget(username, 'bl'), 'utf-8')
+        bList = blacklist[1:-1].split(', ')
         bList.remove(listed)
         blacklist = '{' + ', '.join(bList) + '}'
         redisDB.r.hset(username, 'bl', blacklist)
@@ -74,7 +78,7 @@ def removeBListed(username, listed):
 def getBList(username):
     return str(redisDB.r.hget(username, "bl"), 'utf-8')
 
-# Checks if user specified by listed is on the blacklist of user specified by username.
+# Check if user specified by listed is on the blacklist of user specified by username.
 def isBListed(username, listed):
     blacklist = str(redisDB.r.hget(username, 'bl'), 'utf-8')
     bList = blacklist[1:-1].split(', ')
@@ -83,7 +87,7 @@ def isBListed(username, listed):
     else:
         return False
 
-# Shares the entry specified by id to the user specified by user. Returns True if successful, False otherwise.
+# Shares the entry specified by id to the user specified by user.
 # Note: Attempts to share an entry must first be checked for validity before calling shareEntry().
 def shareEntry(username, id):
     entries = str(redisDB.r.hget(username, "entries"), 'utf-8')
@@ -104,16 +108,12 @@ def shareEntry(username, id):
     elif sid in eList:
         eList.remove(sid)
     
-    if id not in eList: # Ensure the user is not attempting to send an entry that has already been shared.
-        eid = '#' + id[1:] # Add the # indicator to distinguish access level.
-        eList.append(eid)
-        entries = '{' + ', '.join(eList) + '}'
-        redisDB.r.hset(username, 'entries', entries)
-        return True
-    else:
-        return False
+    eid = '#' + id[1:] # Add the # indicator to distinguish access level.
+    eList.append(eid)
+    entries = '{' + ', '.join(eList) + '}'
+    redisDB.r.hset(username, 'entries', entries)
 
-# Shares the entry specified by id to the user specified by user, including the entry's mood score. Returns True if successful, False otherwise.
+# Shares the entry specified by id to the user specified by user, including the entry's mood score.
 # Note: Attempts to share an entry must first be checked for validity before calling shareMood().
 def shareMood(username, id):
     entries = str(redisDB.r.hget(username, "entries"), 'utf-8')
@@ -133,15 +133,11 @@ def shareMood(username, id):
     elif sid in eList:
         eList.remove(sid)
 
-    if id not in eList: # Ensure the user is not attempting to send an entry that has already been shared.
-        eList.append(mid)
-        entries = '{' + ', '.join(eList) + '}'
-        redisDB.r.hset(username, 'entries', entries)
-        return True
-    else:
-        return False
+    eList.append(mid)
+    entries = '{' + ', '.join(eList) + '}'
+    redisDB.r.hset(username, 'entries', entries)
 
-# Shares the entry specified by id to the user specified by user, including the entry's mood score and matched song. Returns True if successful, False otherwise.
+# Shares the entry specified by id to the user specified by user, including the entry's mood score and matched song.
 # Note: Attempts to share an entry must first be checked for validity before calling shareSong().
 def shareSong(username, id):
     entries = str(redisDB.r.hget(username, "entries"), 'utf-8')
@@ -162,13 +158,10 @@ def shareSong(username, id):
     elif sid in eList:
         eList.remove(sid)
 
-    if id not in eList: # Ensure the user is not attempting to send an entry that has already been shared.
-        eList.append(sid)
-        entries = '{' + ', '.join(eList) + '}'
-        redisDB.r.hset(username, 'entries', entries)
-        return True
-    else:
-        return False
+    eList.append(sid)
+    entries = '{' + ', '.join(eList) + '}'
+    redisDB.r.hset(username, 'entries', entries)
+
 
 #Retrieves the information on a song based on its URI.
 def getSong(URI):
