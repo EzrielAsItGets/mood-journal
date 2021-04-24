@@ -185,6 +185,8 @@ def login():
 
 @app.route('/logout')
 def logout():
+    if 'song' in session:
+        session.pop('song', None)
     if 'view' in session:
         session.pop('view', None)
     if 'user' in session:
