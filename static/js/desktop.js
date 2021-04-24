@@ -31,10 +31,15 @@ document.querySelector(".load-entry").ondblclick = function () {
 
 document.querySelector(".blacklist").ondblclick = function () {
     setTimeout( ()=> { this.classList.remove("selected") }, 2 )
-    window.open("https://github.com/EzrielAsItGets")
+    window.location.replace("/blacklist")
 }
 
 document.querySelector(".create-entry").ondblclick = function () {
     setTimeout( ()=> { this.classList.remove("selected") }, 2 )
     window.location.replace("/create")
+}
+
+document.querySelector(".logout-button").ondblclick = function () {
+    setTimeout( ()=> { this.classList.remove("selected") }, 2 )
+    window.location.replace("/logout")
 }
