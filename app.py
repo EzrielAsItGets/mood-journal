@@ -43,7 +43,6 @@ def home():
     if 'song' in session:
         track = template.replace('5TxY7O9lFJJrd22FmboAXe', session['song'])
         return render_template('pages/home.html', player=Markup(track))
-
     return render_template('pages/home.html', player=Markup(template))
 
 
@@ -68,7 +67,6 @@ def loadEntry():
     if 'song' in session:
         track = template.replace('5TxY7O9lFJJrd22FmboAXe', session['song'])
         return render_template('pages/load_entry.html', content=content, player=Markup(track))
-
     return render_template('pages/load_entry.html', content=content, player=Markup(template))
 
 
@@ -102,6 +100,32 @@ def viewEntry():
             return redirect(url_for('home'))
     return render_template('pages/view_entry.html', content=content, mood=mood, song=song, form=form, player=Markup(track))
 
+@app.route('/blacklist', methods=["POST", "GET"])
+def blacklist():
+    form = NetworkForm(request.form)
+    if 'user' not in session:
+        return redirect(url_for('login'))
+    if 'view' in session:
+        session.pop('view', None)
+    template = '<iframe src="https://open.spotify.com/embed/track/5TxY7O9lFJJrd22FmboAXe" width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>'
+    if request.method == 'POST':
+        username = form.name.data
+        if request.form['action'] == 'Add':
+            if not utilities.isBListed(session['user'], username):
+                utilities.addBListed(session['user'], username)
+                return redirect(url_for('blacklist'))
+        elif request.form['action'] == 'Delete':
+            if not utilities.isBListed(session['user'], username):
+                utilities.removeBListed(session['user'], username)
+                return redirect(url_for('blacklist'))
+    strblacklist = utilities.getBList(session['user'])
+    strblacklist = strblacklist.replace('{', '')
+    strblacklist = strblacklist.replace('}', '')
+    blacklist = strblacklist.split(', ')
+    if 'song' in session:
+        track = template.replace('5TxY7O9lFJJrd22FmboAXe', session['song'])
+        return render_template('pages/blacklist.html', blacklist=blacklist, form=form, player=Markup(track))
+    return render_template('pages/blacklist.html', blacklist=blacklist, form=form, player=Markup(template))
 
 @app.route('/create', methods=["POST", "GET"])
 def createEntry():
@@ -118,8 +142,7 @@ def createEntry():
         return redirect(url_for('home'))
     if 'song' in session:
         track = template.replace('5TxY7O9lFJJrd22FmboAXe', session['song'])
-        return render_template('pages/create_entry.html', form=form, player=Markup(track))
-            
+        return render_template('pages/create_entry.html', form=form, player=Markup(track))       
     return render_template('pages/create_entry.html', form=form, player=Markup(template))
 
 
@@ -138,10 +161,26 @@ def login():
             return redirect(url_for('home'))
     return render_template('forms/login.html', form=form)
 
+@app.route('/logout')
+def logout():
+    if 'view' in session:
+        session.pop('view', None)
+    if 'user' in session:
+        session.pop('user', None)
+        return redirect(url_for('login'))
 
-@app.route('/register')
+@app.route('/register', methods=["POST", "GET"])
 def register():
     form = RegisterForm(request.form)
+    if 'user' in session:
+        return redirect(url_for('home'))
+    if 'view' in session:
+        session.pop('view', None)
+    if request.method == 'POST':
+        username = form.name.data
+        password = form.password.data
+        utilities.register(username, password)
+        return redirect(url_for('home'))
     return render_template('forms/register.html', form=form)
     
 
@@ -150,7 +189,6 @@ def register():
 
 @app.errorhandler(500)
 def internal_error(error):
-    #db_session.rollback()
     return render_template('errors/500.html'), 500
 
 

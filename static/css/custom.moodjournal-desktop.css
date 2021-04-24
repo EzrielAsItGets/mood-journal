@@ -65,7 +65,7 @@ a {
     border-color: #99D1FF;
 }
 
-.recycle-bin {
+.logout-button {
     position: absolute;
     right: 8px;
     bottom: 16px;
@@ -367,6 +367,35 @@ input[type=image] {
 
 .window-view {
     max-height: 477px;
+}
+
+.entry-info {
+    margin-left: 15px;
+    margin-top: 8px;
+}
+
+.entry-info-share {
+    margin-left: 5px;
+}
+
+.entry-info-delete {
+    float: right;
+    margin-right: 19px;
+    margin-top: 3px;
+}
+
+.share-field {
+    margin-left: 15px;
+    margin-top: 4px;
+}
+
+.entry-info-blacklist {
+    margin-left: 5px;
+}
+
+.blacklist-field {
+    margin-left: 95px;
+    margin-top: 21px;
 }
 
 @media (orientation: landscape) {

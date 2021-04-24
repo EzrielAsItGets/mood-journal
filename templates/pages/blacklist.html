@@ -1,5 +1,5 @@
 {% extends 'layouts/menu.html' %}
-{% block title %}View Entry{% endblock %}
+{% block title %}Blacklist{% endblock %}
 
 {% block content %}
 
@@ -38,17 +38,17 @@
         <span>People</span>
     </div>
     <div class="view-scroll">
-        <p class="view-entry">{{ content }}</p>
+        {% for user in blacklist %}
+            {% autoescape false %}
+                <p class="view-entry">{{ user }}</p>
+            {% endautoescape %}
+        {% endfor %}
     </div>
     <div class="menu-bar-bottom-view">
         <form action="#" method="post">
-            <input type="checkbox" id="mood" name="mood" value="mood" class="entry-info">
-            <label for="mood"> Mood Score: {{ mood }}</label>
-            <input type="checkbox" id="song" name="song" value="song" class="entry-info">
-            <label for="mood"> Matched Song: {{ song }}</label>
-            {{ form.name(class_ = 'form-control first-input share-field', placeholder = form.name.label.text, autofocus = true) }}
-            <input type="submit" name="action" value="Share" class="entry-info-share">
-            <input type="submit" name="action" value="Delete" class="entry-info-delete">
+            {{ form.name(class_ = 'form-control first-input blacklist-field', placeholder = form.name.label.text, autofocus = true) }}
+            <input type="submit" name="action" value="Add" class="entry-info-blacklist">
+            <input type="submit" name="action" value="Delete" class="entry-info-blacklist">
         </form>
     </div>
   </div>
@@ -59,7 +59,7 @@
     <div class="start-button"><img src="{{ url_for('static', filename = 'img/logo.svg') }}"> start</div>
 
     <div class="opened-tabs">
-      <div class="open-tab"><img src="{{ url_for('static', filename = 'img/notebook.png') }}"> View Entry</div>
+      <div class="open-tab"><img src="{{ url_for('static', filename = 'img/blocked.png') }}"> Blacklist</div>
     </div>
 
     <div class="time">11:20 PM</div>
