@@ -65,7 +65,7 @@ a {
     border-color: #99D1FF;
 }
 
-.recycle-bin {
+.logout-button {
     position: absolute;
     right: 8px;
     bottom: 16px;
@@ -387,6 +387,15 @@ input[type=image] {
 .share-field {
     margin-left: 15px;
     margin-top: 4px;
+}
+
+.entry-info-blacklist {
+    margin-left: 5px;
+}
+
+.blacklist-field {
+    margin-left: 95px;
+    margin-top: 21px;
 }
 
 @media (orientation: landscape) {
