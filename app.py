@@ -100,6 +100,7 @@ def viewEntry():
             return redirect(url_for('home'))
     return render_template('pages/view_entry.html', content=content, mood=mood, song=song, form=form, player=Markup(track))
 
+
 @app.route('/blacklist', methods=["POST", "GET"])
 def blacklist():
     form = NetworkForm(request.form)
@@ -126,6 +127,7 @@ def blacklist():
         track = template.replace('5TxY7O9lFJJrd22FmboAXe', session['song'])
         return render_template('pages/blacklist.html', blacklist=blacklist, form=form, player=Markup(track))
     return render_template('pages/blacklist.html', blacklist=blacklist, form=form, player=Markup(template))
+
 
 @app.route('/create', methods=["POST", "GET"])
 def createEntry():
@@ -161,6 +163,7 @@ def login():
             return redirect(url_for('home'))
     return render_template('forms/login.html', form=form)
 
+
 @app.route('/logout')
 def logout():
     if 'view' in session:
@@ -168,6 +171,7 @@ def logout():
     if 'user' in session:
         session.pop('user', None)
         return redirect(url_for('login'))
+
 
 @app.route('/register', methods=["POST", "GET"])
 def register():
@@ -180,7 +184,7 @@ def register():
         username = form.name.data
         password = form.password.data
         utilities.register(username, password)
-        return redirect(url_for('home'))
+        return redirect(url_for('login'))
     return render_template('forms/register.html', form=form)
     
 
