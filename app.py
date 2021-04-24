@@ -16,60 +16,62 @@ import journaling, utilities
 app = Flask(__name__)
 app.config.from_object('config')
 
-# Login required decorator.
-'''
-def login_required(test):
-    @wraps(test)
-    def wrap(*args, **kwargs):
-        if 'logged_in' in session:
-            return test(*args, **kwargs)
-        else:
-            flash('You need to login first.')
-            return redirect(url_for('login'))
-    return wrap
-'''
 #----------------------------------------------------------------------------#
 # Controllers.
 #----------------------------------------------------------------------------#
 
-
+# Render the home page.
 @app.route('/', methods=["POST", "GET"])
 def home():
     if 'user' not in session:
         return redirect(url_for('login'))
+
     if 'view' in session:
         session.pop('view', None)
+
     template = '<iframe src="https://open.spotify.com/embed/track/5TxY7O9lFJJrd22FmboAXe" width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>'
+
     if 'song' in session:
         track = template.replace('5TxY7O9lFJJrd22FmboAXe', session['song'])
         return render_template('pages/home.html', player=Markup(track))
+
     return render_template('pages/home.html', player=Markup(template))
 
 
+# Render the load entry page.
 @app.route('/load', methods=["POST", "GET"])
 def loadEntry():
     if 'user' not in session:
         return redirect(url_for('login'))
+
     if 'view' in session:
         session.pop('view', None)
+
     template = '<iframe src="https://open.spotify.com/embed/track/5TxY7O9lFJJrd22FmboAXe" width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>'
     entries = journaling.getAllEntries(session['user'])
     datelist = []
+
+    # Call each individual entry's information with the loop and extract information for front-end rendering.
     for entry in entries:
         info = journaling.getEntry(entry)
         date = str(info.get('date'), 'utf-8')
         datelist.append(date)
-    content = dict(zip(entries, datelist))
+
+    content = dict(zip(entries, datelist)) # Combines each entry's UUID with its date and author in a dictionary data structure for front-end rendering
+
     if request.method == 'POST':
         selection = request.form['entry']
         session['view'] = selection
         return redirect(url_for('viewEntry'))
+
     if 'song' in session:
         track = template.replace('5TxY7O9lFJJrd22FmboAXe', session['song'])
         return render_template('pages/load_entry.html', content=content, player=Markup(track))
+
     return render_template('pages/load_entry.html', content=content, player=Markup(template))
 
 
+# Render the view entry page.
 @app.route('/view', methods=["POST", "GET"])
 def viewEntry():
     form = NetworkForm(request.form)
@@ -77,6 +79,7 @@ def viewEntry():
         return redirect(url_for('login'))
     if 'view' not in session:
         return redirect(url_for('loadEntry'))
+
     ID = session['view']
     entry = journaling.getEntry(ID)
 
@@ -120,14 +123,18 @@ def viewEntry():
     return render_template('pages/view_entry.html', content=content, mood=mood, song=song, form=form, player=Markup(track))
 
 
+# Render the blacklist page.
 @app.route('/blacklist', methods=["POST", "GET"])
 def blacklist():
     form = NetworkForm(request.form)
+
     if 'user' not in session:
         return redirect(url_for('login'))
     if 'view' in session:
         session.pop('view', None)
+
     template = '<iframe src="https://open.spotify.com/embed/track/5TxY7O9lFJJrd22FmboAXe" width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>'
+
     if request.method == 'POST':
         username = form.name.data
         if username != session['user']:    # Prevent blacklisting yourself
@@ -138,74 +145,96 @@ def blacklist():
                 elif request.form['action'] == 'Delete':
                     utilities.removeBListed(session['user'], username) #TODO: incorporate the return for error messages
                     return redirect(url_for('blacklist'))
+
     strblacklist = utilities.getBList(session['user'])
     strblacklist = strblacklist.replace('{', '')
     strblacklist = strblacklist.replace('}', '')
     blacklist = strblacklist.split(', ')
+
     if 'song' in session:
         track = template.replace('5TxY7O9lFJJrd22FmboAXe', session['song'])
         return render_template('pages/blacklist.html', blacklist=blacklist, form=form, player=Markup(track))
+
     return render_template('pages/blacklist.html', blacklist=blacklist, form=form, player=Markup(template))
 
 
+# Render the create entry page.
 @app.route('/create', methods=["POST", "GET"])
 def createEntry():
     form = JournalForm(request.form)
+
     if 'user' not in session:
         return redirect(url_for('login'))
+
     if 'view' in session:
         session.pop('view', None)
+
     template = '<iframe src="https://open.spotify.com/embed/track/5TxY7O9lFJJrd22FmboAXe" width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>'
+
     if request.method == 'POST':
         entry = form.body.data
         ID = journaling.createEntry(entry, session['user'])
         utilities.addEntry(session['user'], ID)
         return redirect(url_for('home'))
+
     if 'song' in session:
         track = template.replace('5TxY7O9lFJJrd22FmboAXe', session['song'])
-        return render_template('pages/create_entry.html', form=form, player=Markup(track))       
+        return render_template('pages/create_entry.html', form=form, player=Markup(track))
+
     return render_template('pages/create_entry.html', form=form, player=Markup(template))
 
 
+# Render the login page.
 @app.route('/login', methods=["POST", "GET"])
 def login():
     form = LoginForm(request.form)
+
     if 'user' in session:
         return redirect(url_for('home'))
+
     if 'view' in session:
         session.pop('view', None)
+
     if request.method == 'POST':
         username = form.name.data
         password = form.password.data
         if utilities.authorize(username, password):
             session['user'] = username
             return redirect(url_for('home'))
+
     return render_template('forms/login.html', form=form)
 
 
+# Logs out the user and purges session data.
 @app.route('/logout')
 def logout():
     if 'song' in session:
         session.pop('song', None)
+
     if 'view' in session:
         session.pop('view', None)
+
     if 'user' in session:
         session.pop('user', None)
         return redirect(url_for('login'))
 
 
+# Render the registration page.
 @app.route('/register', methods=["POST", "GET"])
 def register():
     form = RegisterForm(request.form)
     if 'user' in session:
         return redirect(url_for('home'))
+
     if 'view' in session:
         session.pop('view', None)
+
     if request.method == 'POST':
         username = form.name.data
         password = form.password.data
         utilities.register(username, password) # TODO: use the return to flash an error message
         return redirect(url_for('login'))
+        
     return render_template('forms/register.html', form=form)
     
 
