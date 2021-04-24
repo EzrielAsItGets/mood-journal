@@ -1,14 +1,35 @@
-{% extends 'layouts/form.html' %}
+{% extends 'layouts/main.html' %}
 {% block title %}Register{% endblock %}
 {% block content %}
-  <form method="post" class="form">
-    <h3 class="form-heading">Register <a href="{{ url_for('home') }}" title="Back to homepage"><i class="fa fa-home pull-right"></i></a></h3>
-    {{ form.name(class_ = 'form-control first-input', placeholder = form.name.label.text, required = true, autofocus = true) }}
-    {{ form.email(class_ = 'form-control', placeholder = form.email.label.text, required = true) }}
-    {{ form.password(class_ = 'form-control', placeholder = form.password.label.text, required = true) }}
-    {{ form.confirm(class_ = 'form-control last-input', placeholder = form.confirm.label.text, required = true) }}
-    <p class="pull-left"><a href="{{ url_for('login') }}">Login</a></p>
-    <input type="submit" value="Register" class="btn btn-primary btn-lg btn-block"  disabled>
-    <p>You must add database as well as Flask-Login to enable user management. See the <a href="http://www.realpython.com">Real Python</a> course for more info!</p>
-  </form>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-5">
+        <div class="menuTextPos">
+          <p class="segoe-ui menuText">To begin, register</p>
+        </div>
+      </div>
+      <div class="col-lg-3"></div>
+      <div class="col-lg-2">
+        <div class="loginSelectPos hiddenForm">
+          <img src="{{ url_for('static', filename = 'img/login-select.png') }}" class="loginSelect" alt="Login Select">
+        </div>
+        <button class="flowerPos" onclick="revealForm()">
+          <img src="{{ url_for('static', filename = 'img/duck.jpg') }}" class="flower" alt="Flower">
+        </button>
+        <div class="menuChoicePos">
+          <p class="segoe-ui menuChoice">Register</p>
+        </div>
+        <form method="post" class="form login hiddenForm">
+          {{ form.name(class_ = 'form-control first-input', placeholder = form.name.label.text, required = true, autofocus = true) }}
+          <p class="segoe-ui passwordText">Type your password</p>
+          {{ form.password(class_ = 'form-control last-input', placeholder = form.password.label.text, required = true) }}
+          <button type="submit" class="loginButtonPos" width='1' height='1'>
+            <img src="{{ url_for('static', filename = 'img/submit.png') }}" class="loginButton">
+          </button>
+          <p class="pull-left segoe-ui"><a href="{{ url_for('login') }}">Log In</a></p>
+        </form>
+      </div>
+      <div class="col-lg-2"></div>
+    </div>
+  </div>
 {% endblock %}
