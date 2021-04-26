@@ -39,9 +39,7 @@
     </div>
     <div class="view-scroll">
         {% for user in blacklist %}
-            {% autoescape false %}
                 <p class="view-entry">{{ user }}</p>
-            {% endautoescape %}
         {% endfor %}
     </div>
     <div class="menu-bar-bottom-view">
