@@ -33,7 +33,7 @@ def getEntry(id):
     else:
         return False
 
-# Return a list of all entry IDs visible to useredisDB.r.
+# Return a list of all entry IDs visible to user.
 def getAllEntries(username):
     entries = str(redisDB.r.hget(username, "entries"), 'utf-8')
     eList = entries[1:-1].split(", ")

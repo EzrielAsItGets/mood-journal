@@ -4,7 +4,7 @@ from spotipy.oauth2 import SpotifyOAuth
 
 # Register the user with the provided username. Returns True if successful, False if the name already exists.
 def register(username, password):
-    if(not isUser(username)):
+    if not isUser(username):
         user = {}
         user['pw'] = password
         user['entries'] = '{}'
@@ -13,6 +13,9 @@ def register(username, password):
         return True
     else:
         return False
+
+def deleteAccount(username):
+    redisDB.r.delete(username)
 
 # Authorize user login if credentials match those in database. Returns True if successful, false otherwise.
 def authorize(id, pw):
