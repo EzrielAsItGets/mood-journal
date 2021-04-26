@@ -116,12 +116,9 @@ def viewEntry():
     if request.method == 'POST':
         if request.form['action'] == 'Share':
             if session['user'] == str(entry.get('author'), 'utf-8'):           # Prevent sharing other people's entries
-                print('inside author check')
                 username = form.name.data
                 if(utilities.isUser(username)):                                # Prevent sharing with non-existent users
-                    print('inside existence check')
                     if username != session['user']:                            # Prevent sharing an entry with yourself
-                        print('inside self check')
                         if not utilities.isBListed(username, session['user']): # Prevent blacklisted users from sharing
                             if request.form.get('mood'):
                                 utilities.shareMood(username, ID)

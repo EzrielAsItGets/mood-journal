@@ -40,9 +40,7 @@
     <form method="post">
         <div class="entry-scroll">
             {% for id, date in content.items() %}
-                {% autoescape false %}
                     <button type="submit" class="entry-list" name="entry" value="{{ id }}">{{ date }}</button>><br>
-                {% endautoescape %}
             {% endfor %}
         </div>
     </form>

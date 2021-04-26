@@ -38,12 +38,14 @@ def getAllEntries(username):
     entries = str(redisDB.r.hget(username, "entries"), 'utf-8')
     eList = entries[1:-1].split(", ")
 
+    if eList == ['']:
+        eList = []
+
     return eList
 
 # Create a new journal entry key-value pair in the database with the content specified by entry and the author specified by author.
 def createEntry(entry, author):
     entry = str(entry)
-    print('entry: ' + entry)
     date = str(datetime.datetime.now())
     score = getAnalysis(entry)
     song = matchSong(score)
