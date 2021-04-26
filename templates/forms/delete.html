@@ -1,0 +1,35 @@
+{% extends 'layouts/main.html' %}
+{% block title %}Delete{% endblock %}
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-5">
+        <div class="menuTextPos">
+          <p class="segoe-ui menuText">To begin, delete your account</p>
+        </div>
+      </div>
+      <div class="col-lg-3"></div>
+      <div class="col-lg-2">
+        <div class="loginSelectPos hiddenForm">
+          <img src="{{ url_for('static', filename = 'img/login-select.png') }}" class="loginSelect" alt="Login Select">
+        </div>
+        <button class="flowerPos" onclick="revealForm()">
+          <img src="{{ url_for('static', filename = 'img/rocket.jpg') }}" class="flower" alt="Flower">
+        </button>
+        <div class="menuChoicePos">
+          <p class="segoe-ui menuChoice">Delete Account</p>
+        </div>
+        <form method="post" class="form login hiddenForm">
+          {{ form.name(class_ = 'form-control first-input', placeholder = form.name.label.text, required = true, autofocus = true) }}
+          <p class="segoe-ui passwordText">Type your password</p>
+          {{ form.password(class_ = 'form-control last-input', placeholder = form.password.label.text, required = true) }}
+          <button type="submit" class="loginButtonPos" width='1' height='1'>
+            <img src="{{ url_for('static', filename = 'img/submit.png') }}" class="loginButton">
+          </button>
+          <p class="pull-left segoe-ui"><a href="{{ url_for('login') }}">Log In</a></p>
+        </form>
+      </div>
+      <div class="col-lg-2"></div>
+    </div>
+  </div>
+{% endblock %}
