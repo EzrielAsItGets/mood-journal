@@ -54,8 +54,11 @@ def loadEntry():
     # Call each individual entry's information with the loop and extract information for front-end rendering.
     for entry in entries:
         info = journaling.getEntry(entry)
-        date = str(info.get('date'), 'utf-8')
-        datelist.append(date)
+        if info != False:
+            date = str(info.get('date'), 'utf-8')
+            datelist.append(date)
+        else:
+            utilities.removeEntry(session['user'], entry)
 
     content = dict(zip(entries, datelist)) # Combines each entry's UUID with its date and author in a dictionary data structure for front-end rendering
 
@@ -104,9 +107,12 @@ def viewEntry():
     if request.method == 'POST':
         if request.form['action'] == 'Share':
             if session['user'] == str(entry.get('author'), 'utf-8'):           # Prevent sharing other people's entries
+                print('inside author check')
                 username = form.name.data
                 if(utilities.isUser(username)):                                # Prevent sharing with non-existent users
+                    print('inside existence check')
                     if username != session['user']:                            # Prevent sharing an entry with yourself
+                        print('inside self check')
                         if not utilities.isBListed(username, session['user']): # Prevent blacklisted users from sharing
                             if request.form.get('mood'):
                                 utilities.shareMood(username, ID)

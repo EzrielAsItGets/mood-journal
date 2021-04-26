@@ -14,7 +14,13 @@ def register(username, password):
     else:
         return False
 
+# Delete the account associated with username. Iterate through the user's entry list, deleting all entries as well.
 def deleteAccount(username):
+    entries = str(redisDB.r.hget(username, "entries"), 'utf-8')
+    eList = entries[1:-1].split(", ")
+    for entry in eList:
+        redisDB.r.delete(entry)
+
     redisDB.r.delete(username)
 
 # Authorize user login if credentials match those in database. Returns True if successful, false otherwise.
@@ -93,6 +99,7 @@ def isBListed(username, listed):
 # Shares the entry specified by id to the user specified by user.
 # Note: Attempts to share an entry must first be checked for validity before calling shareEntry().
 def shareEntry(username, id):
+    print('sharing engaged')
     entries = str(redisDB.r.hget(username, "entries"), 'utf-8')
     eList = entries[1:-1].split(", ")
     if entries != '{}':
@@ -166,7 +173,7 @@ def shareSong(username, id):
     redisDB.r.hset(username, 'entries', entries)
 
 
-#Retrieves the information on a song based on its URI.
+# Retrieves the information on a song based on its URI.
 def getSong(URI):
     scope = 'user-library-read'
     sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
