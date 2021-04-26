@@ -198,4 +198,10 @@ def updateCurrent(username, id):
 
 # Gets the user's current mood and song.
 def getCurrent(username):
-    return str(redisDB.r.hget(username, 'current'), 'utf-8')
+    current = redisDB.r.hget(username, 'current')
+    
+    if current != None:
+        return str(current, 'utf-8')
+    else:
+        return None
+
