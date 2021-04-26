@@ -25,10 +25,11 @@ def deleteAccount(username):
 
 # Authorize user login if credentials match those in database. Returns True if successful, false otherwise.
 def authorize(id, pw):
-    if pw == str(redisDB.r.hget(id, 'pw'), 'utf-8'):
-        return True
-    else:
-        return False
+    if redisDB.r.hget(id, 'pw'):
+        if pw == str(redisDB.r.hget(id, 'pw'), 'utf-8'):
+            return True
+
+    return False
 
 # Checks if the specified username exists in the database.
 def isUser(username):
