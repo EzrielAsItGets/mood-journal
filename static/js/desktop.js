@@ -29,6 +29,11 @@ document.querySelector(".load-entry").ondblclick = function () {
     window.location.replace("/load")
 }
 
+document.querySelector(".share-current").ondblclick = function () {
+    setTimeout( ()=> { this.classList.remove("selected") }, 2 )
+    window.location.replace("/share")
+}
+
 document.querySelector(".blacklist").ondblclick = function () {
     setTimeout( ()=> { this.classList.remove("selected") }, 2 )
     window.location.replace("/blacklist")
