@@ -75,6 +75,7 @@ def loadEntry():
 @app.route('/view', methods=["POST", "GET"])
 def viewEntry():
     form = NetworkForm(request.form)
+
     if 'user' not in session:
         return redirect(url_for('login'))
     if 'view' not in session:
@@ -223,6 +224,7 @@ def logout():
 @app.route('/register', methods=["POST", "GET"])
 def register():
     form = RegisterForm(request.form)
+
     if 'user' in session:
         return redirect(url_for('home'))
 
@@ -236,7 +238,28 @@ def register():
         return redirect(url_for('login'))
         
     return render_template('forms/register.html', form=form)
-    
+
+
+# Render the delete account page.
+@app.route('/delete', methods=["POST", "GET"])
+def delete():
+    form = LoginForm(request.form)
+
+    if 'user' in session:
+        return redirect(url_for('home'))
+
+    if 'view' in session:
+        session.pop('view', None)
+
+    if request.method == 'POST':
+        username = form.name.data
+        password = form.password.data
+        if utilities.authorize(username, password):
+            utilities.deleteAccount(username)
+            return redirect(url_for('register'))
+
+    return render_template('forms/delete.html', form=form)
+
 
 # Error handlers.
 
@@ -249,6 +272,7 @@ def internal_error(error):
 @app.errorhandler(404)
 def not_found_error(error):
     return render_template('errors/404.html'), 404
+
 
 if not app.debug:
     file_handler = FileHandler('error.log')
