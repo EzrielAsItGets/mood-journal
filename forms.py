@@ -6,7 +6,6 @@ from wtforms.widgets import TextArea
 
 # Set your classes here.
 
-
 class RegisterForm(FlaskForm):
     name = TextField(
         'Username', validators=[DataRequired(), Length(min=6, max=25)]
@@ -18,12 +17,6 @@ class RegisterForm(FlaskForm):
 class LoginForm(FlaskForm):
     name = TextField('Username', [DataRequired()])
     password = PasswordField('Password', [DataRequired()])
-
-
-class ForgotForm(FlaskForm):
-    email = TextField(
-        'Email', validators=[DataRequired(), Length(min=6, max=40)]
-    )
 
 class JournalForm(FlaskForm):
     body = StringField(
