@@ -189,3 +189,13 @@ def getSong(URI):
     song_name = str(song_info['name']) + ' by ' + str(dictionary['name'])
 
     return song_name
+
+
+# Updates the user's current mood and song to the last created entry.
+def updateCurrent(username, id):
+    redisDB.r.hset(username, 'current', id)
+
+
+# Gets the user's current mood and song.
+def getCurrent(username):
+    return redisDB.r.hget(username, 'current')
