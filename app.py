@@ -136,6 +136,34 @@ def viewEntry():
     return render_template('pages/view_entry.html', content=content, mood=mood, song=song, form=form, player=Markup(track))
 
 
+# Render the share current page.
+@app.route('/share', methods=["POST", "GET"])
+def shareCurrent():
+    form = NetworkForm(request.form)
+
+    if 'user' not in session:
+        return redirect(url_for('login'))
+    if 'view' in session:
+        session.pop('view', None)
+
+    template = '<iframe src="https://open.spotify.com/embed/track/5TxY7O9lFJJrd22FmboAXe" width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>'
+
+    if request.method == 'POST':
+        if request.form['action'] == 'Share':
+            username = form.name.data
+            if(utilities.isUser(username)):                                # Prevent sharing with non-existent users
+                if username != session['user']:                            # Prevent sharing an entry with yourself
+                    if not utilities.isBListed(username, session['user']): # Prevent blacklisted users from sharing
+                        current = utilities.getCurrent(session['user'])
+                        if current != None:
+                            utilities.shareSong(username, current)
+
+    if 'song' in session:
+        track = template.replace('5TxY7O9lFJJrd22FmboAXe', session['song'])
+        return render_template('pages/share_current.html', form=form, player=Markup(track))
+
+    return render_template('pages/share_current.html', form=form, player=Markup(template))
+
 # Render the blacklist page.
 @app.route('/blacklist', methods=["POST", "GET"])
 def blacklist():
@@ -188,6 +216,7 @@ def createEntry():
         entry = form.body.data
         ID = journaling.createEntry(entry, session['user'])
         utilities.addEntry(session['user'], ID)
+        utilities.updateCurrent(session['user'], ID)
         return redirect(url_for('home'))
 
     if 'song' in session:
