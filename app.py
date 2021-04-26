@@ -50,17 +50,26 @@ def loadEntry():
     template = '<iframe src="https://open.spotify.com/embed/track/5TxY7O9lFJJrd22FmboAXe" width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>'
     entries = journaling.getAllEntries(session['user'])
     datelist = []
+    authorlist = []
+    authordate = []
 
     # Call each individual entry's information with the loop and extract information for front-end rendering.
     for entry in entries:
         info = journaling.getEntry(entry)
         if info != False:
-            date = str(info.get('date'), 'utf-8')
+            date = str(info.get('date'), 'utf-8') + ' - '
             datelist.append(date)
+            author = str(info.get('author'), 'utf-8')
+            authorlist.append(author)
         else:
             utilities.removeEntry(session['user'], entry)
 
-    content = dict(zip(entries, datelist)) # Combines each entry's UUID with its date and author in a dictionary data structure for front-end rendering
+    mergedlist = tuple(zip(datelist, authorlist))
+
+    for item in mergedlist:
+        authordate.append(''.join(item))
+
+    content = dict(zip(entries, authordate)) # Combines each entry's UUID with its date and author in a dictionary data structure for front-end rendering
 
     if request.method == 'POST':
         selection = request.form['entry']
