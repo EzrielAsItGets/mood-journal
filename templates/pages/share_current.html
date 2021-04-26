@@ -41,8 +41,12 @@
         <span>Insert</span>
         <span>People</span>
     </div>
-    <div class="view-scroll"></div>
+    <div class="view-scroll">
+        <p class="view-entry">{{ content }}</p>
+    </div>
     <div class="menu-bar-bottom-view">
+        <span>Mood : {{ mood }}</span>
+        <span>Song : {{ song }}</span>
         <form action="#" method="post">
             {{ form.name(class_ = 'form-control first-input blacklist-field', placeholder = form.name.label.text, autofocus = true) }}
             <input type="submit" name="action" value="Share" class="entry-info-blacklist">
