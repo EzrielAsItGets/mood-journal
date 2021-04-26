@@ -1,0 +1,67 @@
+{% extends 'layouts/menu.html' %}
+{% block title %}Share Current{% endblock %}
+
+{% block content %}
+
+<div class="desktop">
+    <div class="icon load-entry">
+        <img src="{{ url_for('static', filename = 'img/notebook.png') }}">
+        <div class="icon-name">Load Entry</div>
+    </div>
+    <div class="icon share-current">
+        <img src="{{ url_for('static', filename = 'img/sharecurrent.png') }}">
+        <div class="icon-name">Share Current</div>
+    </div>
+    <div class="icon blacklist">
+        <img src="{{ url_for('static', filename = 'img/blocked.png') }}">
+        <div class="icon-name">Blacklist</div>
+    </div>
+    <div class="icon create-entry">
+        <img src="{{ url_for('static', filename = 'img/create.png') }}">
+        <div class="icon-name">Create Entry</div>
+    </div>
+    <div class="icon logout-button">
+        <img src="{{ url_for('static', filename = 'img/logout.png') }}">
+        <div class="icon-name">Logout</div>
+    </div>
+  </div>
+
+  <div class="window window-view">
+    <div class="title-bar">
+        <div><img src="{{ url_for('static', filename = 'img/notebook.png') }}"> MoodJournal</div>
+        <div class="controls">
+            <button class="cls"></button>
+            <button class="max"></button>
+            <button class="min"></button>
+        </div>
+    </div>
+    <div class="menu-bar">
+        <span>File</span>
+        <span>Edit</span>
+        <span>Insert</span>
+        <span>People</span>
+    </div>
+    <div class="view-scroll"></div>
+    <div class="menu-bar-bottom-view">
+        <form action="#" method="post">
+            {{ form.name(class_ = 'form-control first-input blacklist-field', placeholder = form.name.label.text, autofocus = true) }}
+            <input type="submit" name="action" value="Share" class="entry-info-blacklist">
+        </form>
+    </div>
+  </div>
+
+  <div class="window player">{{ player }}</div>
+
+  <div class="taskbar">
+    <div class="start-button"><img src="{{ url_for('static', filename = 'img/logo.svg') }}"> start</div>
+
+    <div class="opened-tabs">
+      <div class="open-tab"><img src="{{ url_for('static', filename = 'img/blocked.png') }}"> Blacklist</div>
+    </div>
+
+    <div class="time">11:20 PM</div>
+  </div>
+
+  <script type="text/javascript" src="/static/js/window.js" defer></script>
+
+{% endblock %}
