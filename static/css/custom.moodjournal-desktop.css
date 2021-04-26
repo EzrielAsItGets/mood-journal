@@ -398,6 +398,21 @@ input[type=image] {
     margin-top: 21px;
 }
 
+.share-current-field {
+    margin-left: 101px;
+    margin-top: 10px;
+}
+
+.current-mood {
+    display: inline-block;
+    margin-left: 86px;
+    margin-top: 5px;
+}
+
+.current-song {
+    margin-left: 80px;
+}
+
 @media (orientation: landscape) {
     body {
         background-position: center bottom;
