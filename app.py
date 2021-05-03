@@ -2,7 +2,7 @@
 # Imports
 #----------------------------------------------------------------------------#
 
-from flask import Flask, redirect, url_for, render_template, request, session, Markup
+from flask import Flask, redirect, url_for, render_template, request, session, Markup, flash
 import logging
 from logging import Formatter, FileHandler
 from forms import *
@@ -154,6 +154,7 @@ def shareCurrent():
         content = str(info.get('entry'), 'utf-8')
         mood = str(info.get('score'), 'utf-8')
         song = utilities.getSong(str(info.get('song'), 'utf-8'))
+        session['song'] = song
     else:
         return redirect(url_for('createEntry'))
 
@@ -251,6 +252,8 @@ def login():
         if utilities.authorize(username, password):
             session['user'] = username
             return redirect(url_for('home'))
+        else:
+            flash('Invalid Username/Password!')
 
     return render_template('forms/login.html', form=form)
 
@@ -283,8 +286,11 @@ def register():
     if request.method == 'POST':
         username = form.name.data
         password = form.password.data
-        utilities.register(username, password) # TODO: use the return to flash an error message
-        return redirect(url_for('login'))
+        if form.validate_on_submit():
+            utilities.register(username, password) # TODO: use the return to flash an error message
+            return redirect(url_for('login'))
+        else:
+            flash('Invalid Username!')
         
     return render_template('forms/register.html', form=form)
 
@@ -306,6 +312,8 @@ def delete():
         if utilities.authorize(username, password):
             utilities.deleteAccount(username)
             return redirect(url_for('register'))
+        else:
+            flash('Account does not exist!')
 
     return render_template('forms/delete.html', form=form)
 
