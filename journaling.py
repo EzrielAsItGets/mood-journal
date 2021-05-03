@@ -35,7 +35,7 @@ def getEntry(id):
 
 # Return a list of all entry IDs visible to user.
 def getAllEntries(username):
-    entries = str(redisDB.r.hget(username, "entries"), 'utf-8')
+    entries = redisDB.toString(redisDB.r.hget(username, "entries"))
     eList = entries[1:-1].split(", ")
 
     if eList == ['']:
@@ -83,26 +83,24 @@ def getAnalysis(entry):
 def matchSong(score):
     strscore = '!' + str(score)
     if redisDB.r.get(strscore):
-        strsonglist = str(redisDB.r.get(strscore), encoding='utf-8')
+        strsonglist = redisDB.toString(redisDB.r.get(strscore))
         songlist = strsonglist.split(', ')
         song = random.choice(songlist)
         return song
     else:
         for i in range (1, 9): # If the score is not found in the songs database, it will modify the passed score until one is found
-            i /= 10
-            newscore = score + i
+            newscore = ((score * 10) + i) / 10 # This arithmetic circumvents Python's wonky floating point division problems introducing aditional decimal places.
             strscore = '!' + str(newscore)
             if redisDB.r.get(strscore):
-                strsonglist = str(redisDB.r.get(strscore), encoding='utf-8')
+                strsonglist = redisDB.toString(redisDB.r.get(strscore))
                 songlist = strsonglist.split(', ')
                 song = random.choice(songlist)
                 return song
             else:
-                newscore = score - i
+                newscore = ((score * 10) - i) / 10
                 strscore = '!' + str(newscore)
                 if redisDB.r.get(strscore):
-                    strsonglist = str(redisDB.r.get(strscore), encoding='utf-8')
+                    strsonglist = redisDB.toString(redisDB.r.get(strscore))
                     songlist = strsonglist.split(', ')
                     song = random.choice(songlist)
                     return song
-            i *= 10

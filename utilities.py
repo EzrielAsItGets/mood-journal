@@ -16,7 +16,7 @@ def register(username, password):
 
 # Delete the account associated with username. Iterate through the user's entry list, deleting all entries as well.
 def deleteAccount(username):
-    entries = str(redisDB.r.hget(username, "entries"), 'utf-8')
+    entries = redisDB.toString(redisDB.r.hget(username, "entries"))
     eList = entries[1:-1].split(", ")
     for entry in eList:
         redisDB.r.delete(entry)
@@ -26,7 +26,7 @@ def deleteAccount(username):
 # Authorize user login if credentials match those in database. Returns True if successful, false otherwise.
 def authorize(id, pw):
     if redisDB.r.hget(id, 'pw'):
-        if pw == str(redisDB.r.hget(id, 'pw'), 'utf-8'):
+        if pw == redisDB.toString(redisDB.r.hget(id, 'pw')):
             return True
 
     return False
@@ -40,7 +40,7 @@ def isUser(username):
 
 # Adds the given entry to the given user's entry list.
 def addEntry(username, id):
-    entries = str(redisDB.r.hget(username, 'entries'), 'utf-8')
+    entries = redisDB.toString(redisDB.r.hget(username, 'entries'))
     if entries != "{}":
         entries = entries[0:-1] + ', ' + id + '}'
     else:
@@ -49,7 +49,7 @@ def addEntry(username, id):
 
 # Removes the given entry from the given user's entry list. Returns True if successful, False otherwise.
 def removeEntry(username, id):
-    entries = str(redisDB.r.hget(username, 'entries'), 'utf-8')
+    entries = redisDB.toString(redisDB.r.hget(username, 'entries'))
     eList = entries[1:-1].split(', ')
     if id in eList: # Check that the entry to be removed exists in the list.
         eList.remove(id)
@@ -62,7 +62,7 @@ def removeEntry(username, id):
 # Add user specified by listed to the blacklist of username. Returns True if successful, False if the user is already blacklisted.
 def addBListed(username, listed):
     if not isBListed(username, listed):
-        blacklist = str(redisDB.r.hget(username, 'bl'), 'utf-8')
+        blacklist = redisDB.toString(redisDB.r.hget(username, 'bl'))
         if blacklist != "{}":
             blacklist = blacklist[0:-1] + ', ' + listed + '}'
         else:
@@ -75,7 +75,7 @@ def addBListed(username, listed):
 # Remove user specified by listed from the blacklist of username. Returns True if successful, False if the user is not already blacklisted.
 def removeBListed(username, listed):
     if isBListed(username, listed):
-        blacklist = str(redisDB.r.hget(username, 'bl'), 'utf-8')
+        blacklist = redisDB.toString(redisDB.r.hget(username, 'bl'))
         bList = blacklist[1:-1].split(', ')
         bList.remove(listed)
         blacklist = '{' + ', '.join(bList) + '}'
@@ -86,11 +86,11 @@ def removeBListed(username, listed):
 
 # Return the blacklist of username.
 def getBList(username):
-    return str(redisDB.r.hget(username, "bl"), 'utf-8')
+    return redisDB.toString(redisDB.r.hget(username, "bl"))
 
 # Check if user specified by listed is on the blacklist of user specified by username.
 def isBListed(username, listed):
-    blacklist = str(redisDB.r.hget(username, 'bl'), 'utf-8')
+    blacklist = redisDB.toString(redisDB.r.hget(username, 'bl'))
     bList = blacklist[1:-1].split(', ')
     if listed in bList:
         return True
@@ -100,8 +100,7 @@ def isBListed(username, listed):
 # Shares the entry specified by id to the user specified by user.
 # Note: Attempts to share an entry must first be checked for validity before calling shareEntry().
 def shareEntry(username, id):
-    print('sharing engaged')
-    entries = str(redisDB.r.hget(username, "entries"), 'utf-8')
+    entries = redisDB.toString(redisDB.r.hget(username, "entries"))
     eList = entries[1:-1].split(", ")
     if entries != '{}':
         eList = entries[1:-1].split(", ")
@@ -127,7 +126,7 @@ def shareEntry(username, id):
 # Shares the entry specified by id to the user specified by user, including the entry's mood score.
 # Note: Attempts to share an entry must first be checked for validity before calling shareMood().
 def shareMood(username, id):
-    entries = str(redisDB.r.hget(username, "entries"), 'utf-8')
+    entries = redisDB.toString(redisDB.r.hget(username, "entries"))
     if entries != '{}':
         eList = entries[1:-1].split(", ")
     else:
@@ -151,7 +150,7 @@ def shareMood(username, id):
 # Shares the entry specified by id to the user specified by user, including the entry's mood score and matched song.
 # Note: Attempts to share an entry must first be checked for validity before calling shareSong().
 def shareSong(username, id):
-    entries = str(redisDB.r.hget(username, "entries"), 'utf-8')
+    entries = redisDB.toString(redisDB.r.hget(username, "entries"))
     eList = entries[1:-1].split(", ")
     if entries != '{}':
         eList = entries[1:-1].split(", ")

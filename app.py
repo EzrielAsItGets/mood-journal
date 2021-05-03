@@ -126,6 +126,15 @@ def viewEntry():
                                 utilities.shareSong(username, ID)
                             else:
                                 utilities.shareEntry(username, ID)
+                            flash('Share successful!')
+                        else:
+                            flash('Entries cannot be shared with this user!')
+                    else:
+                        flash('Entries cannot be self-shared!')
+                else:
+                    flash('Username invalid!')
+            else:
+                flash('Shared entries are not shareable!')
         elif request.form['action'] == 'Delete':
             # Calling delete on a shared ID will not remove anything from the database, as shared IDs have flags to indicate they were shared.
             journaling.deleteEntry(ID)
@@ -151,10 +160,14 @@ def shareCurrent():
 
     if current != None:
         info = journaling.getEntry(current)
-        content = str(info.get('entry'), 'utf-8')
-        mood = str(info.get('score'), 'utf-8')
-        song = utilities.getSong(str(info.get('song'), 'utf-8'))
-        session['song'] = song
+        if info:
+            content = str(info.get('entry'), 'utf-8')
+            mood = str(info.get('score'), 'utf-8')
+            song = utilities.getSong(str(info.get('song'), 'utf-8'))
+            session['song'] = str(info.get('song'), 'utf-8')
+        else:
+            flash('Most recent entry deleted!')
+            return redirect(url_for('home'))
     else:
         return redirect(url_for('createEntry'))
 
@@ -166,10 +179,19 @@ def shareCurrent():
                     if not utilities.isBListed(username, session['user']): # Prevent blacklisted users from sharing
                         if current != None:
                             utilities.shareSong(username, current)
+                            flash("Share successful!")
+                        else:
+                            flash('No recent entries to share!')
+                    else:
+                        flash('Entries cannot be shared with this user!')
+                else:
+                    flash('Entries cannot be self-shared!')
+            else:
+                flash('Username invalid!')
 
     if 'song' in session:
         track = template.replace('5TxY7O9lFJJrd22FmboAXe', session['song'])
-        return render_template('pages/share_current.html', form=form, player=Markup(track))
+        return render_template('pages/share_current.html', content=content, mood=mood, song=song, form=form, player=Markup(track))
 
     return render_template('pages/share_current.html', content=content, mood=mood, song=song, form=form, player=Markup(template))
 
@@ -187,14 +209,22 @@ def blacklist():
 
     if request.method == 'POST':
         username = form.name.data
-        if username != session['user']:    # Prevent blacklisting yourself
-            if utilities.isUser(username): # Prevent blacklisting a non-existent user
+        if username != session['user']:                                    # Prevent blacklisting yourself
+            if utilities.isUser(username):                                 # Prevent blacklisting a non-existent user
                 if request.form['action'] == 'Add':
-                    utilities.addBListed(session['user'], username) #TODO: incorporate the return for error message
-                    return redirect(url_for('blacklist'))
+                    if utilities.addBListed(session['user'], username):    # Prevent blacklisting a user twice
+                        return redirect(url_for('blacklist'))
+                    else:
+                        flash('That user is already blacklisted!')
                 elif request.form['action'] == 'Delete':
-                    utilities.removeBListed(session['user'], username) #TODO: incorporate the return for error messages
-                    return redirect(url_for('blacklist'))
+                    if utilities.removeBListed(session['user'], username): # Prevent de-blacklisting a user who is not blacklisted.
+                        return redirect(url_for('blacklist'))
+                    else:
+                        flash('That user is not blacklisted!')
+            else:
+                flash('Username invalid!')
+        else:
+            flash('Self-blacklisting is disallowed!')
 
     strblacklist = utilities.getBList(session['user'])
     strblacklist = strblacklist.replace('{', '')
