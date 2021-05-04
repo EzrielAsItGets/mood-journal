@@ -317,7 +317,7 @@ def register():
         username = form.name.data
         password = form.password.data
         if form.validate_on_submit():
-            utilities.register(username, password) # TODO: use the return to flash an error message
+            utilities.register(username, password)
             return redirect(url_for('login'))
         else:
             flash('Invalid Username!')
