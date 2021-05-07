@@ -177,7 +177,7 @@ def shareSong(username, id):
 # Retrieves the information on a song based on its URI.
 def getSong(URI):
     scope = 'user-library-read'
-    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=os.environ['SPOTIPY_CLIENT_ID'], client_secret=os.environ['SPOTIPY_CLIENT_ID'], redirect_uri=os.environ['SPOTIPY_REDIRECT_URI'], scope=scope))
+    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=os.environ.get('SPOTIPY_CLIENT_ID'), client_secret=os.environ.get('SPOTIPY_CLIENT_ID'), redirect_uri=os.environ.get('SPOTIPY_REDIRECT_URI'), scope=scope))
 
     song_info = sp.track(track_id = URI)
 
