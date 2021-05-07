@@ -9,6 +9,7 @@ flask-wtf = "*"
 redis = "*"
 spotipy = "*"
 google-cloud-language = "*"
+gunicorn = "*"
 
 [dev-packages]
 
