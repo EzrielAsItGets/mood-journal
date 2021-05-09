@@ -314,13 +314,13 @@ def register():
         session.pop('view', None)
 
     if request.method == 'POST':
-        username = form.name.data
-        password = form.password.data
-        if form.validate_on_submit():
+        if utilities.validateString(form.name.data):
+            username = form.name.data
+            password = form.password.data
             utilities.register(username, password)
             return redirect(url_for('login'))
         else:
-            flash('Invalid Username!')
+            flash('Invalid Username/Password!')
         
     return render_template('forms/register.html', form=form)
 
