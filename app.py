@@ -227,7 +227,10 @@ def blacklist():
                     else:
                         flash('That user is not blacklisted!')
             else:
-                flash('Username invalid!')
+                if utilities.isBListed(session['user'], username):         # If an account on the blacklist no longer exists, de-blacklist
+                    utilities.removeBListed(session['user'], username)
+                else:
+                    flash('Username invalid!')
         else:
             flash('Self-blacklisting is disallowed!')
 
