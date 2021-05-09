@@ -205,3 +205,11 @@ def getCurrent(username):
     else:
         return None
 
+# Validates username input on the registration page by checking for invalid first characters.
+def validateString(username):
+    invalidchars = ['"', "'", '{', '}', '!', '#', '$', '%', '_', ' ']
+
+    if username[0] in invalidchars:
+        return False
+    else:
+        return True
