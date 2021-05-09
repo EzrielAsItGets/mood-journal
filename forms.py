@@ -8,7 +8,7 @@ from wtforms.widgets import TextArea
 
 class RegisterForm(FlaskForm):
     name = TextField(
-        'Username', validators=[DataRequired(), Regexp('/^[A-Za-z][A-Za-z0-9_-]*$/', message='Invalid characters present'), Length(min=6, max=25)]
+        'Username', validators=[DataRequired(), Length(min=6, max=25)]
     )
     password = PasswordField(
         'Password', validators=[DataRequired(), Length(min=6, max=40)]
