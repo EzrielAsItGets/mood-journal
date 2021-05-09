@@ -47,6 +47,11 @@ def loadEntry():
     if 'view' in session:
         session.pop('view', None)
 
+    if request.method == 'POST':
+        selection = request.form['entry']
+        session['view'] = selection
+        return redirect(url_for('viewEntry'))
+
     template = '<iframe src="https://open.spotify.com/embed/track/5TxY7O9lFJJrd22FmboAXe" width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>'
     entries = journaling.getAllEntries(session['user'])
     datelist = []
@@ -317,8 +322,10 @@ def register():
         if utilities.validateString(form.name.data):
             username = form.name.data
             password = form.password.data
-            utilities.register(username, password)
-            return redirect(url_for('login'))
+            if utilities.register(username, password):
+                return redirect(url_for('login'))
+            else:
+                flash('User already exists!')
         else:
             flash('Invalid Username/Password!')
         
