@@ -68,7 +68,7 @@ a {
 .logout-button {
     position: absolute;
     right: 8px;
-    bottom: 16px;
+    bottom: 32px;
 }
 
 .window {
@@ -405,7 +405,7 @@ input[type=image] {
 
 .current-mood {
     display: inline-block;
-    margin-left: 86px;
+    margin-left: 50px;
     margin-top: 5px;
 }
 
